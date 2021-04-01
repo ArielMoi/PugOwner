@@ -1,0 +1,24 @@
+.life-bar {
+  display: flex;
+  margin: 5px;
+}
+
+.life-bar p {
+  width: 80px;
+}
+
+.bar-container {
+  width: 100%;
+  background-color: #ddd;
+}
+
+.bar {
+  background: #808080;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.bar p {
+  margin-left: 40px;
+  color: #fff;
+}
