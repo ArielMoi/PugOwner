@@ -6,7 +6,7 @@ import pugDefault from '../../img/pug-default.png'
 const Pug = () => {
     return (
         <>
-           <img src={pugDefault} /> 
+           <img src={pugDefault} alt='pug' /> 
         </>
     )
 }

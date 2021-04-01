@@ -1,13 +1,13 @@
 import "./App.css";
-import { useState, useEffect } from "react";
-import Item from "./Components/Item/Item.Component";
-import pugDefault from "./img/pug-default.png";
+// import { useState, useEffect } from "react";
+import Nav from "./Components/Nav/Nav.Component";
+// import pugDefault from "./img/pug-default.png";
 
 
 function App() {
   return (
     <div className="App">
-      <Item imgUrl={pugDefault} product='apple' price='80'/>
+      <Nav />
     </div>
   );
 }

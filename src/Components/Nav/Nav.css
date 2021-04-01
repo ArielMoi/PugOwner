@@ -1,0 +1,11 @@
+.Nav {
+  display: flex;
+  justify-content: space-evenly;
+  color: #fff;
+  background: black;
+}
+
+.Nav ol li {
+  display: inline-block;
+  padding: 15px;
+}
