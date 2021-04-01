@@ -1,0 +1,15 @@
+.btn-img {
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  position: absolute;
+  top: 60px;
+}
+
+.btn-img:focus {
+  outline: none;
+}
+
+.btn-img img {
+  width: 100px;
+}
