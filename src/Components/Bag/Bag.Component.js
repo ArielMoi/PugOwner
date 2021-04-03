@@ -6,29 +6,29 @@ const Bag = (props) => {
   const foods = [];
   let key = 0;
 
-  Object.entries(props.bagObj.food).forEach(([amount, item]) => {
+  Object.entries(props.bagObj.food).forEach(([name, [item,amount]]) => {
     // iterate over the obj and creating the items accordingly
     foods.push(
       <Item
         onClickItem={props.clickOnItem}
         key={key++}
-        imgUrl={item[0]}
-        product={item[1]}
+        imgUrl={item}
+        product={name}
         amount={amount}
       />
     ); 
   });
 
-  Object.entries(props.bagObj.toys).forEach(([amount, item]) => {
+  Object.entries(props.bagObj.toys).forEach(([name, [item, amount]]) => {
     toys.push(
       <Item
         onClickItem={props.clickOnItem}
         key={key++}
-        imgUrl={item[0]}
-        product={item[1]}
+        imgUrl={item}
+        product={name}
         amount={amount}
       />
-    ); 
+    );
   });
 
   return (

@@ -7,7 +7,7 @@ const Item = (details) => {
       <div className="item-details">
         <h4>{details.product}</h4>
         <h6>{details.price && `Price: ${details.price}`}</h6>
-        <h6>{details.amount && `amount: ${details.amount}`}</h6>
+        <h6>{details.amount && `${details.amount}`}</h6>
       </div>
     </div>
   );
