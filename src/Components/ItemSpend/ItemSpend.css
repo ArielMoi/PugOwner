@@ -6,11 +6,11 @@
   align-items: center;
   position: absolute;
   top: 70px;
-  right: 290px;
+  right: 20%;
 }
 
 .item-spend img {
   width: 90px;
-  margin-left: 30px;
+  margin-left: 20px;
   border-radius: 50px;
 }
