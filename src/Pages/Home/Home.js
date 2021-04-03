@@ -21,8 +21,17 @@ const API = `https://605b251627f0050017c0645f.mockapi.io/users/`;
 let currentUserId;
 
 const Home = () => {
-  let currentUserHealth = [100, 100, 100];
-  let currentUserBag = {
+  let currentUserHealth;
+  let currentUserBag;
+
+  const [bagVisibility, setBagVisibility] = useState("hidden");
+  // const [health, setHealth] = useState([100, 100, 100]); // [0] -> hunger, [1] -> happy, [2] -> tired
+  const [currentItem, setCurrentItem] = useState("");
+  const [itemSpendWindowVisibility, setItemSpendWindowVisibility] = useState(
+    "hidden"
+  );
+  const [health, setHealth] = useState([100, 100, 100]);
+  const [userBag, setUserBag] = useState({
     food: {
       apple: [appleImg, 1],
       banana: [bananaImg, 1],
@@ -35,73 +44,87 @@ const Home = () => {
       chewing: [chewingToy, 1],
       stick: [stickToy, 1],
     },
-  };
+  });
 
   const postCurrentUser = async () => {
-    let { data } = await axios.post(API, {
-      health: [100, 100, 100],
-      bag: {
-        food: {
-          apple: [appleImg, 1],
-          banana: [bananaImg, 1],
-          bawl: [bawlImg, 1],
-          chicken: [chickenImg, 1],
+    try {
+      let { data } = await axios.post(API, {
+        health: [100, 100, 100],
+        bag: {
+          food: {
+            apple: [appleImg, 1],
+            banana: [bananaImg, 1],
+            bawl: [bawlImg, 1],
+            chicken: [chickenImg, 1],
+          },
+          toys: {
+            ball: [ballToy, 1],
+            balls: [ballsToy, 1],
+            chewing: [chewingToy, 1],
+            stick: [stickToy, 1],
+          },
         },
-        toys: {
-          ball: [ballToy, 1],
-          balls: [ballsToy, 1],
-          chewing: [chewingToy, 1],
-          stick: [stickToy, 1],
-        },
-      },
-    });
+      });
 
-    currentUserId = data.id;
-    localStorage.setItem("id", { currentUserId });
+      currentUserId = data.id;
+      localStorage.setItem("id", { currentUserId });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const collectStartData = async () => {
-    let { data } = await axios.get(`${API}${localStorage.getItem("id")}`);
-    currentUserHealth = data.health;
-    currentUserBag = data.bag;
-    console.log(data);
+    try {
+      let { data } = await axios.get(`${API}${localStorage.getItem("id")}`);
+
+      currentUserHealth = data.userHealth;
+      currentUserBag = data.bag;
+
+      setHealth(currentUserHealth);
+      setUserBag(currentUserBag);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  if (localStorage.getItem("id")) {
-    collectStartData();
-  } else {
-    postCurrentUser();
-    collectStartData();
-  }
+  // const collecting = async () => {
+  //   await collectStartData();
+  //   // .then(() => {
+  //   //   console.log("updating");
+  //   //   setHealth(currentUserHealth);
+  //   //   setUserBag(currentUserBag); // ! keeps looping and rendering for some reason until bag obj becomes undefined
+  //   // });
+  //   console.log(currentUserHealth);
+  //   // setHealth(currentUserHealth);
+  //   // setUserBag(currentUserBag);
+  // };
 
-  const [bagVisibility, setBagVisibility] = useState("hidden");
-  // const [health, setHealth] = useState([100, 100, 100]); // [0] -> hunger, [1] -> happy, [2] -> tired
-  const [currentItem, setCurrentItem] = useState("");
-  const [itemSpendWindowVisibility, setItemSpendWindowVisibility] = useState(
-    "hidden"
-  );
-  const [health, setHealth] = useState(currentUserHealth);
-  const [userBag, setUserBag] = useState(currentUserBag);
-  // const [userBag, setUserBag] = useState({
-  //   food: {
-  //     apple: [appleImg, 1],
-  //     banana: [bananaImg, 1],
-  //     bawl: [bawlImg, 1],
-  //     chicken: [chickenImg, 1],
-  //   },
-  //   toys: {
-  //     ball: [ballToy, 1],
-  //     balls: [ballsToy, 1],
-  //     chewing: [chewingToy, 1],
-  //     stick: [stickToy, 1],
-  //   },
-  // });\
+  useEffect(() => {
+    if (!localStorage.getItem("id")) {
+      console.log("not found user");
+      postCurrentUser();
+      collectStartData();
+    } else {
+      console.log("found user");
+      // collecting();
+      // collectStartData().then(() => {
+      //   console.log('updating');
+      //   setHealth(currentUserHealth);
+      //   setUserBag(currentUserBag); // ! keeps looping and rendering for some reason until bag obj becomes undefined
+      // });
+    }
+  }, []);
 
   async function updateUserInApi() {
-    await axios.put(`${API}${currentUserId}`, {
-      health,
+    currentUserId = localStorage.getItem("id");
+    console.log(currentUserId);
+    console.log(health);
+    let data = await axios.put(`${API}${currentUserId}`, {
+      userHealth: health,
       bag: userBag,
     });
+
+    console.log(data);
   }
 
   const clickOnBag = () => {
@@ -110,17 +133,6 @@ const Home = () => {
       ? setBagVisibility("visible")
       : setBagVisibility("hidden");
   };
-
-  useEffect(
-    () => {
-      setTimeout(async () => {
-        await setHealth([health[0] - 5, health[1] - 5, health[2] - 5]);
-        await updateUserInApi();
-      }, 30000); // 900000 -> 15min
-    },
-    [health],
-    []
-  );
 
   const clickOnItem = (userItem) => {
     let bagTemp = { ...userBag };
@@ -153,13 +165,24 @@ const Home = () => {
     updateUserInApi();
   };
 
+  // useEffect(
+  //   () => {
+  //     setTimeout(async () => {
+  //       await setHealth([health[0] - 5, health[1] - 5, health[2] - 5]);
+  //       await updateUserInApi();
+  //     }, 30000); // 900000 -> 15min
+  //   },
+  //   [health],
+  //   []
+  // );
+
   return (
     <div>
       <PugStage />
       <LifeBarsBoard
-        foodAmount={health[0] ? health[0] : "0"}
-        happinessAmount={health[1] ? health[1] : "1"}
-        sleepAmount={health[2] ? health[2] : "2"}
+        foodAmount={health[0]}
+        happinessAmount={health[1]}
+        sleepAmount={health[2]}
       />
       <Button img={bagImg} onClickFunc={clickOnBag} />
       <Bag
