@@ -4,27 +4,35 @@ import Item from "../Item/Item.Component";
 const Bag = (props) => {
   const toys = [];
   const foods = [];
+  let key = 0;
 
   Object.entries(props.bagObj.food).forEach(([amount, item]) => {
-    Array(Number(amount))
-      .fill()
-      .forEach(() => {
-        // creates array to iterate over with map
-        foods.push(<Item imgUrl={item[0]} product={item[1]} />); // doesn't return for some reason
-      });
+    // iterate over the obj and creating the items accordingly
+    foods.push(
+      <Item
+        onClickItem={props.clickOnItem}
+        key={key++}
+        imgUrl={item[0]}
+        product={item[1]}
+        amount={amount}
+      />
+    ); 
   });
 
   Object.entries(props.bagObj.toys).forEach(([amount, item]) => {
-    Array(Number(amount))
-      .fill()
-      .forEach(() => {
-        // creates array to iterate over with map
-        toys.push(<Item imgUrl={item[0]} product={item[1]} />); // doesn't return for some reason
-      });
+    toys.push(
+      <Item
+        onClickItem={props.clickOnItem}
+        key={key++}
+        imgUrl={item[0]}
+        product={item[1]}
+        amount={amount}
+      />
+    ); 
   });
 
   return (
-    <div className='bag' style={{visibility:props.visibility}}>
+    <div className="bag" style={{ visibility: props.visibility }}>
       <h1>YOUR BAG</h1>
 
       <div>

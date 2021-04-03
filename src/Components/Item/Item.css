@@ -6,11 +6,16 @@
 
 .item {
   border: 1px solid black;
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   display: flex;
   flex-direction: column;
   position: relative;
+  border-radius: 20px;
+}
+
+.item img {
+  border-radius: 20px;
 }
 
 .item-details {
