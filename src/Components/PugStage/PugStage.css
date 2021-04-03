@@ -1,5 +1,7 @@
 .PugStage {
-  /* display: flex;
-  justify-content: center; */
   text-align: center;
+}
+
+.PugStage img {
+  width: 600px;
 }

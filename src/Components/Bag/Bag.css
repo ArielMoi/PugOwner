@@ -1,0 +1,13 @@
+.bag {
+  margin: 50px;
+  padding: 20px;
+  position: absolute;
+  top: 20px;
+  left: 50px;
+}
+
+.bag-type {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 5px;
+}
