@@ -21,7 +21,21 @@ const API = `https://605b251627f0050017c0645f.mockapi.io/users/`;
 let currentUserId;
 
 const Home = () => {
-  let currentUserHealth, currentUserBag;
+  let currentUserHealth = [100, 100, 100];
+  let currentUserBag = {
+    food: {
+      apple: [appleImg, 1],
+      banana: [bananaImg, 1],
+      bawl: [bawlImg, 1],
+      chicken: [chickenImg, 1],
+    },
+    toys: {
+      ball: [ballToy, 1],
+      balls: [ballsToy, 1],
+      chewing: [chewingToy, 1],
+      stick: [stickToy, 1],
+    },
+  };
 
   const postCurrentUser = async () => {
     let { data } = await axios.post(API, {
@@ -43,7 +57,7 @@ const Home = () => {
     });
 
     currentUserId = data.id;
-    localStorage.setItem("id", { currentUserId });  
+    localStorage.setItem("id", { currentUserId });
   };
 
   const collectStartData = async () => {
@@ -81,7 +95,14 @@ const Home = () => {
   //     chewing: [chewingToy, 1],
   //     stick: [stickToy, 1],
   //   },
-  // });
+  // });\
+
+  async function updateUserInApi() {
+    await axios.put(`${API}${currentUserId}`, {
+      health,
+      bag: userBag,
+    });
+  }
 
   const clickOnBag = () => {
     // open and close bag
@@ -92,9 +113,10 @@ const Home = () => {
 
   useEffect(
     () => {
-      setTimeout(() => {
-        setHealth([health[0] - 5, health[1] - 5, health[2] - 5]);
-      }, 55000); // 900000 -> 15min
+      setTimeout(async () => {
+        await setHealth([health[0] - 5, health[1] - 5, health[2] - 5]);
+        await updateUserInApi();
+      }, 30000); // 900000 -> 15min
     },
     [health],
     []
@@ -127,15 +149,17 @@ const Home = () => {
     setTimeout(() => {
       setItemSpendWindowVisibility("hidden");
     }, 3000);
+
+    updateUserInApi();
   };
 
   return (
     <div>
       <PugStage />
       <LifeBarsBoard
-        foodAmount={health[0]}
-        happinessAmount={health[1]}
-        sleepAmount={health[2]}
+        foodAmount={health[0] ? health[0] : "0"}
+        happinessAmount={health[1] ? health[1] : "1"}
+        sleepAmount={health[2] ? health[2] : "2"}
       />
       <Button img={bagImg} onClickFunc={clickOnBag} />
       <Bag
@@ -149,3 +173,5 @@ const Home = () => {
 };
 
 export default Home;
+
+/// function to update api directly
