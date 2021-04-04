@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 // import { useEffect } from "react";
 import AlbumNote from "../../Components/AlbumNote/AlbumNote.Component";
+import EditAlbumNoteWindow from '../../Components/EditAlbumNoteWindow/EditAlbumNoteWindow.Component'
 import "./MyAlbum.css";
 
 const API = `https://605b251627f0050017c0645f.mockapi.io/users/`;
@@ -48,6 +49,7 @@ function Album() {
   let key = 0;
   return (
     <div className="Album">
+      < EditAlbumNoteWindow />
       <h1>My Album Board</h1>
       <div className="album-grid">
         {/* iterate over album to extract all notes. */}

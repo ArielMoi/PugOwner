@@ -1,5 +1,4 @@
 import './CreatePugPic.css'
-import {useRef} from 'react'
 
 import pug1 from '../../img/cool-pug.png'
 import pug2 from '../../img/drinking-pug.jpg'
@@ -33,7 +32,7 @@ function CreatePugPic(props){
         <img
           src={pugPics[props.pugIndex]}
           //   src={pugPics[Math.floor(Math.random() * pugPics.length)]}
-          alt="random pug pic"
+          alt="Pug"
         />
         {/* <textarea ref={userInput} rows="4" cols="50" /> */}
         {props.input}
