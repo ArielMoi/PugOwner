@@ -134,7 +134,7 @@ const Home = () => {
 
 
   //* rendering methods
-  useEffect(() => {
+  useEffect(() => { // only on first run
     if (!localStorage.getItem("id")) {
       console.log("not found user");
       postCurrentUser();
@@ -144,17 +144,17 @@ const Home = () => {
     }
   }, []);
 
-  useEffect(
-    () => {
-      setTimeout(async () => {
-        await setHunger(hunger >= 5 && hunger - 5);
-        await setHappy(happy >= 5 && happy - 5);
-        updateUserInApi();
-      }, 30000); // 900000 -> 15min
-    },
-    [hunger, happy],
-    []
-  );
+  // useEffect( // each health change
+  //   () => {
+  //     setTimeout(async () => {
+  //       await setHunger(hunger >= 5 && hunger - 5);
+  //       await setHappy(happy >= 5 && happy - 5);
+  //       updateUserInApi();
+  //     }, 30000); // 900000 -> 15min
+  //   },
+  //   [hunger, happy],
+  //   []
+  // );
 
   return (
     <div className="home">

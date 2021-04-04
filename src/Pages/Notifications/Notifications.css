@@ -1,0 +1,18 @@
+.notifications {
+  text-align: center;
+}
+
+.notifications h1 {
+  padding: 20px;
+  color: orangered;
+}
+
+.notifications button {
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.notifications button:hover {
+  color: orangered;
+}

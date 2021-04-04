@@ -1,0 +1,27 @@
+.notification-window {
+  border: 1px solid orangered;
+  border-radius: 10px;
+  padding: 20px 80px;
+  margin: 20px;
+  background: rgba(128, 128, 128, 0.596);
+}
+
+.notification-window p {
+  font-size: 0.75rem;
+  color: orangered;
+  text-align: left;
+}
+
+.notification-window button {
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.notification-window button:hover {
+  color: orangered;
+}
+
+.btns {
+  float: right;
+}
