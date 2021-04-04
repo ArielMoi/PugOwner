@@ -66,7 +66,7 @@ const Home = (props) => {
             stick: [stickToy, 1],
           },
         },
-        album: {}
+        album: {},
       });
 
       localStorage.setItem("id", `${data.id}`);
@@ -83,7 +83,7 @@ const Home = (props) => {
       setHunger(data.hunger);
       setHappy(data.happy);
       setUserBag(data.bag);
-      setAlbumNotes(data.album)
+      setAlbumNotes(data.album);
     } catch (e) {
       console.log(e);
     }
@@ -163,7 +163,7 @@ const Home = (props) => {
 
   const [picVisibility, setPicVisibility] = useState("hidden");
 
-  const clickOnPic = () => {
+  const clickOnTakePicture = () => {
     // open and close Pic maker
     picVisibility === "hidden"
       ? setPicVisibility("visible")
@@ -174,11 +174,11 @@ const Home = (props) => {
   let pugIndex = Math.floor(Math.random() * 11);
 
   const clickSubmit = async () => {
-    setAlbumNotes({ ...albumNotes, [pugIndex]: userInput.current.value });
+    setAlbumNotes({ ...albumNotes, [userInput.current.value]: [pugIndex] });
 
     try {
-      let { data } = await axios.post(API, {
-        album: { ...albumNotes, [pugIndex]: userInput.current.value },
+      let { data } = await axios.put(`${API}${localStorage.getItem("id")}`, {
+        album: { ...albumNotes, [userInput.current.value]: [pugIndex] },
       });
 
       console.log(data);
@@ -186,17 +186,19 @@ const Home = (props) => {
       console.log(e);
     }
 
+    userInput.current.value = "";
+    await clickOnTakePicture(); // to close pic window
     pugIndex = Math.floor(Math.random() * 11); // initializing pug index
-  };
+  };;
 
   return (
     <div className="Home">
-      <button className="home-btn" onClick={clickOnPic}>
+      <button className="home-btn" onClick={clickOnTakePicture}>
         <i className="fas fa-camera-retro fa-2x"></i>
       </button>
       <CreatePugPic
         visibility={picVisibility}
-        onClickExit={clickOnPic}
+        onClickExit={clickOnTakePicture}
         input={<textarea ref={userInput} rows="4" cols="50" />}
         onClickSubmit={clickSubmit}
         pugIndex={pugIndex}

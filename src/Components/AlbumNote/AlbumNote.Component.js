@@ -32,10 +32,10 @@ function NotificationWindow(props) {
       <img src={pugPics[props.pugNum]} alt="pug" />
       <h3>{props.message}</h3>
       <div className="btns">
-        <button>
+        <button onClick={props.editClick}>
           <i className="far fa-edit"></i>
         </button>
-        <button>
+        <button onClick={props.deleteClick}>
           <i className="far fa-trash-alt"></i>
         </button>
       </div>

@@ -41,7 +41,7 @@ function CreatePugPic(props){
           Submit
         </button>
         <button onClick={props.onClickExit} id="x">
-          <i class="fas fa-times-circle"></i>
+          <i className="fas fa-times-circle"></i>
         </button>
       </div>
     );

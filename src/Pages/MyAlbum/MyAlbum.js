@@ -1,37 +1,64 @@
 import axios from "axios";
+import { useEffect, useState } from "react";
 // import { useEffect } from "react";
 import AlbumNote from "../../Components/AlbumNote/AlbumNote.Component";
 import "./MyAlbum.css";
 
-function Album(props) {
+const API = `https://605b251627f0050017c0645f.mockapi.io/users/`;
+
+function Album() {
+  const [album, setAlbum] = useState({});
+
+  useEffect(() => {
+    // collecting initializing data for the album
+    const collectAlbum = async () => {
+      let { data } = await axios.get(`${API}${localStorage.getItem("id")}`);
+      setAlbum(data.album);
+    };
+
+    collectAlbum();
+  }, []);
+
+  // update album in api func
+  const updateAlbumInApi = async () => {
+    try {
+      let { data } = await axios.put(`${API}${localStorage.getItem("id")}`, {
+        album: { ...album },
+      });
+
+      console.log(data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // delete func
+  const deleteFromAlbum = async (mes) => {
+    let updatedAlbum = { ...album };
+    await delete updatedAlbum[mes];
+    await setAlbum(updatedAlbum);
+    console.log(updatedAlbum); // *
+    console.log(album); // ! album not updating to updated album
+    updateAlbumInApi();
+  };
+
+
+  // edit func
+
+  let key = 0;
   return (
     <div className="Album">
       <h1>My Album Board</h1>
       <div className="album-grid">
-        {/* iterate over props.album to extract all notes. should  */}
-        <AlbumNote
-          date="18.10.20"
-          time="18:20"
-          message="this will be a notification"
-          pugNum="3"
-        />
-        <AlbumNote
-          date="18.10.20"
-          time="18:20"
-          message="this will be a notification"
-          pugNum="5"
-        />
-        <AlbumNote
-          date="18.10.20"
-          time="18:20"
-          message="this will be a notification"
-          pugNum="7"
-        />
-        <AlbumNote
-          date="18.10.20"
-          time="18:20"
-          message="this will be a notification"
-        />
+        {/* iterate over album to extract all notes. */}
+        {Object.entries(album).map(([note,PugIndex]) => (
+          <AlbumNote
+            key={key++}
+            message={note}
+            pugNum={PugIndex}
+            deleteClick={() => deleteFromAlbum(note)}
+          />
+        ))}
       </div>
     </div>
   );

@@ -4,7 +4,7 @@
   padding: 20px 80px;
   margin: 20px;
   background: rgba(128, 128, 128, 0.596);
-  /* width: 30%; */
+  height: max-content;
 }
 
 .album-window p {
@@ -21,6 +21,10 @@
 
 .album-window button:hover {
   color: orangered;
+}
+
+.album-window img {
+  width: 250px;
 }
 
 .btns {
