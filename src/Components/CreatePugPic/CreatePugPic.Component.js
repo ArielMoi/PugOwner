@@ -1,4 +1,5 @@
 import './CreatePugPic.css'
+import {useRef} from 'react'
 
 import pug1 from '../../img/cool-pug.png'
 import pug2 from '../../img/drinking-pug.jpg'
@@ -12,30 +13,34 @@ import pug9 from '../../img/pug-waiting-food.png'
 import pug10 from '../../img/pug-waiting-trip.jpg'
 import pug11 from '../../img/pug-waving.jpg'
 
-const pugPics = [
-  pug1,
-  pug2,
-  pug3,
-  pug4,
-  pug5,
-  pug6,
-  pug7,
-  pug8,
-  pug9,
-  pug10,
-  pug11
-];
+const pugPics = {
+  1:pug1,
+  2:pug2,
+  3:pug3,
+  4:pug4,
+  5:pug5,
+  6:pug6,
+  7:pug7,
+  8:pug8,
+  9:pug9,
+  10:pug10,
+  11:pug11,
+};
 
 function CreatePugPic(props){
     return (
-      <div className="create-pug-pic">
+      <div className="create-pug-pic" style={{ visibility: props.visibility }}>
         <img
-          src={pugPics[Math.floor(Math.random() * pugPics.length)]}
+          src={pugPics[props.pugIndex]}
+          //   src={pugPics[Math.floor(Math.random() * pugPics.length)]}
           alt="random pug pic"
         />
-        <textarea rows="4" cols="50" />
-        <button onClick={props.onClickSubmit} type="submit">Submit</button>
-        <button onClick={props.onClickExit} id="x" >
+        {/* <textarea ref={userInput} rows="4" cols="50" /> */}
+        {props.input}
+        <button onClick={props.onClickSubmit} type="submit">
+          Submit
+        </button>
+        <button onClick={props.onClickExit} id="x">
           <i class="fas fa-times-circle"></i>
         </button>
       </div>

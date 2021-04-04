@@ -1,0 +1,8 @@
+.home-btn {
+  background: transparent;
+  padding: 5px;
+  /* float: right;0/0 */
+  position: absolute;
+  right: 5px;
+  margin: 10px;
+}

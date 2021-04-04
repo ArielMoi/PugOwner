@@ -2,10 +2,11 @@ import PugStage from "../../Components/PugStage/PugStage.Component";
 import LifeBarsBoard from "../../Components/LifeBarsBoard/LifeBarsBoard.Component";
 import Bag from "../../Components/Bag/Bag.Component";
 import Button from "../../Components/Button/Button.Component";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ItemSpend from "../../Components/ItemSpend/ItemSpend.Component";
 import axios from "axios";
 import "./Home.css";
+import CreatePugPic from "../../Components/CreatePugPic/CreatePugPic.Component";
 
 //imgs
 import bagImg from "../../img/bag.png";
@@ -20,7 +21,7 @@ import stickToy from "../../img/stick.jpg";
 
 const API = `https://605b251627f0050017c0645f.mockapi.io/users/`;
 
-const Home = () => {
+const Home = (props) => {
   // * initializing states
   const [bagVisibility, setBagVisibility] = useState("hidden");
   const [currentItem, setCurrentItem] = useState("");
@@ -43,6 +44,7 @@ const Home = () => {
       stick: [stickToy, 1],
     },
   });
+  const [albumNotes, setAlbumNotes] = useState({});
 
   // * UPDATE API functions
   const postCurrentUser = async () => {
@@ -64,6 +66,7 @@ const Home = () => {
             stick: [stickToy, 1],
           },
         },
+        album: {}
       });
 
       localStorage.setItem("id", `${data.id}`);
@@ -80,6 +83,7 @@ const Home = () => {
       setHunger(data.hunger);
       setHappy(data.happy);
       setUserBag(data.bag);
+      setAlbumNotes(data.album)
     } catch (e) {
       console.log(e);
     }
@@ -92,7 +96,6 @@ const Home = () => {
       bag: userBag,
     });
   }
-
 
   // * CLICK ON function
   const clickOnBag = () => {
@@ -132,9 +135,9 @@ const Home = () => {
     }, 2000);
   };
 
-
   //* rendering methods
-  useEffect(() => { // only on first run
+  useEffect(() => {
+    // only on first run
     if (!localStorage.getItem("id")) {
       console.log("not found user");
       postCurrentUser();
@@ -156,8 +159,48 @@ const Home = () => {
   //   []
   // );
 
+  // * TAKE PIC OPTION
+
+  const [picVisibility, setPicVisibility] = useState("hidden");
+
+  const clickOnPic = () => {
+    // open and close Pic maker
+    picVisibility === "hidden"
+      ? setPicVisibility("visible")
+      : setPicVisibility("hidden");
+  };
+
+  const userInput = useRef(null);
+  let pugIndex = Math.floor(Math.random() * 11);
+
+  const clickSubmit = async () => {
+    setAlbumNotes({ ...albumNotes, [pugIndex]: userInput.current.value });
+
+    try {
+      let { data } = await axios.post(API, {
+        album: { ...albumNotes, [pugIndex]: userInput.current.value },
+      });
+
+      console.log(data);
+    } catch (e) {
+      console.log(e);
+    }
+
+    pugIndex = Math.floor(Math.random() * 11); // initializing pug index
+  };
+
   return (
-    <div className="home">
+    <div className="Home">
+      <button className="home-btn" onClick={clickOnPic}>
+        <i className="fas fa-camera-retro fa-2x"></i>
+      </button>
+      <CreatePugPic
+        visibility={picVisibility}
+        onClickExit={clickOnPic}
+        input={<textarea ref={userInput} rows="4" cols="50" />}
+        onClickSubmit={clickSubmit}
+        pugIndex={pugIndex}
+      />
       <PugStage />
       <LifeBarsBoard foodAmount={hunger} happinessAmount={happy} />
       <Button img={bagImg} onClickFunc={clickOnBag} />
@@ -172,6 +215,3 @@ const Home = () => {
 };
 
 export default Home;
-
-// TODO:
-// render don't work as expected -> bars don't update correctly.
