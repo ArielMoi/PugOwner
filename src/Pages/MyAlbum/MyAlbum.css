@@ -1,18 +1,24 @@
-.notifications {
+.Album {
   text-align: center;
 }
 
-.notifications h1 {
-  padding: 20px;
-  color: orangered;
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
 
-.notifications button {
+.Album h1 {
+  padding: 20px;
+  color: orangered;
+  grid: 1, span 3;
+}
+
+.Album button {
   background: transparent;
   border: 1px solid transparent;
   cursor: pointer;
 }
 
-.notifications button:hover {
+.Album button:hover {
   color: orangered;
 }

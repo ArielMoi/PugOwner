@@ -1,24 +1,25 @@
-.notification-window {
+.album-window {
   border: 1px solid orangered;
   border-radius: 10px;
   padding: 20px 80px;
   margin: 20px;
   background: rgba(128, 128, 128, 0.596);
+  /* width: 30%; */
 }
 
-.notification-window p {
+.album-window p {
   font-size: 0.75rem;
   color: orangered;
   text-align: left;
 }
 
-.notification-window button {
+.album-window button {
   background: transparent;
   border: 1px solid transparent;
   cursor: pointer;
 }
 
-.notification-window button:hover {
+.album-window button:hover {
   color: orangered;
 }
 

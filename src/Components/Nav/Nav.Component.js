@@ -9,7 +9,7 @@ function Nav() {
           <Link to="/">PugOwner</Link>
         </li>
         <li>
-          <Link to="/Notifications">Notifications</Link>
+          <Link to="/MyAlbum">MyAlbum</Link>
         </li>
         <li>
           <Link to="/Shop">Shop</Link>

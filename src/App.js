@@ -2,7 +2,7 @@ import "./App.css";
 // import { useState, useEffect } from "react";
 import Nav from "./Components/Nav/Nav.Component";
 import Home from "./Pages/Home/Home";
-import Notifications from './Pages/Notifications/Notifications'
+import MyAlbum from './Pages/MyAlbum/MyAlbum'
 import { BrowserRouter, Route } from "react-router-dom";
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
         <Nav />
         {/* <Home /> */}
         <Route path="/" exact component={Home} />
-        <Route path="/Notifications" exact component={Notifications} />
+        <Route path="/MyAlbum" exact component={MyAlbum} />
         {/* <Route path="/Shop" exact component={Shop} /> */}
       </BrowserRouter>
     </div>
