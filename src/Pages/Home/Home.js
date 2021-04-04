@@ -25,7 +25,8 @@ const Home = () => {
   const [itemSpendWindowVisibility, setItemSpendWindowVisibility] = useState(
     "hidden"
   );
-  const [health, setHealth] = useState([100, 100, 100]);// [0] -> hunger, [1] -> happy, [2] -> tired
+  const [hunger, setHunger] = useState(100);
+  const [happy, setHappy] = useState(100);
   const [userBag, setUserBag] = useState({
     food: {
       apple: [appleImg, 1],
@@ -44,7 +45,9 @@ const Home = () => {
   const postCurrentUser = async () => {
     try {
       let { data } = await axios.post(API, {
-        health: [100, 100, 100],
+        // health: [100, 100],
+        hunger: 100,
+        happy: 100,
         bag: {
           food: {
             apple: [appleImg, 1],
@@ -69,10 +72,11 @@ const Home = () => {
 
   const collectStartData = async () => {
     try {
-      let id = localStorage.getItem("id")
+      let id = localStorage.getItem("id");
       let { data } = await axios.get(`${API}${id}`);
 
-      setHealth(data.health);
+      setHunger(data.hunger);
+      setHappy(data.happy);
       setUserBag(data.bag);
     } catch (e) {
       console.log(e);
@@ -91,7 +95,9 @@ const Home = () => {
 
   async function updateUserInApi() {
     await axios.put(`${API}${localStorage.getItem("id")}`, {
-      health: health,
+      // health: [hunger, happy],
+      hunger,
+      happy,
       bag: userBag,
     });
   }
@@ -103,13 +109,13 @@ const Home = () => {
       : setBagVisibility("hidden");
   };
 
-  const clickOnItem = (userItem) => {
+  const clickOnItem = async (userItem) => {
     let bagTemp = { ...userBag };
 
     // updates user bag - iterate over food and over toys
     Object.entries(bagTemp.food).forEach(([name, item]) => {
       if (name === userItem.target.alt) {
-        health[0] <= 95 && setHealth([health[0] + 5, health[1], health[2]]); // adding to hunger health
+        hunger <= 95 && setHunger(hunger + 5);
         if (item[1] !== 0) bagTemp[name] = [item[0], --item[1]];
       }
     });
@@ -117,42 +123,38 @@ const Home = () => {
     Object.entries(bagTemp.toys).forEach(([name, item]) => {
       // iterate over current bag to update the right item
       if (name === userItem.target.alt) {
-        health[1] <= 95 && setHealth([health[0], health[1] + 5, health[2]]); // adding to happy health
+        happy <= 95 && setHappy(happy + 5);
         if (item[1] !== 0) bagTemp[name] = [item[0], --item[1]];
       }
     });
 
-    setUserBag(bagTemp); // update state
+    await setUserBag(bagTemp); // update state
+    updateUserInApi();
 
     // show message of item used
     setCurrentItem(userItem.target.src);
     setItemSpendWindowVisibility("visible");
     setTimeout(() => {
       setItemSpendWindowVisibility("hidden");
-    }, 30000);
-
-    updateUserInApi();
+    }, 2000);
   };
 
   useEffect(
     () => {
       setTimeout(async () => {
-        await setHealth([health[0] - 5, health[1] - 5, health[2] - 5]);
-        await updateUserInApi();
+        await setHunger(hunger >= 5 && hunger - 5);
+        await setHappy(happy >= 5 && happy - 5);
+        updateUserInApi();
       }, 30000); // 900000 -> 15min
     },
-    [health],
+    [hunger, happy],
     []
   );
 
   return (
     <div>
       <PugStage />
-      <LifeBarsBoard
-        foodAmount={health[0] ? health[0] : '100'}
-        happinessAmount={health[1] ? health[1] : '100'}
-        sleepAmount={health[2] ? health[2] : '100'}
-      />
+      <LifeBarsBoard foodAmount={hunger} happinessAmount={happy} />
       <Button img={bagImg} onClickFunc={clickOnBag} />
       <Bag
         clickOnItem={(event) => clickOnItem(event)}
@@ -165,5 +167,3 @@ const Home = () => {
 };
 
 export default Home;
-
-/// function to update api directly
