@@ -5,7 +5,6 @@ const Bag = (props) => {
   const toys = [];
   const foods = [];
   let key = 0;
-  console.log(props.bagObj);
   Object.entries(props.bagObj.food).forEach(([name, [item,amount]]) => {
     // iterate over the obj and creating the items accordingly
     foods.push(

@@ -9,3 +9,12 @@
   display: inline-block;
   padding: 15px;
 }
+
+.Nav a {
+  font-style: none;
+  color: #fff;
+}
+
+.Nav a:hover {
+  color: orangered;
+}

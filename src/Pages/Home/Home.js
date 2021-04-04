@@ -5,6 +5,7 @@ import Button from "../../Components/Button/Button.Component";
 import { useState, useEffect } from "react";
 import ItemSpend from "../../Components/ItemSpend/ItemSpend.Component";
 import axios from "axios";
+import "./Home.css";
 
 //imgs
 import bagImg from "../../img/bag.png";
@@ -20,6 +21,7 @@ import stickToy from "../../img/stick.jpg";
 const API = `https://605b251627f0050017c0645f.mockapi.io/users/`;
 
 const Home = () => {
+  // * initializing states
   const [bagVisibility, setBagVisibility] = useState("hidden");
   const [currentItem, setCurrentItem] = useState("");
   const [itemSpendWindowVisibility, setItemSpendWindowVisibility] = useState(
@@ -42,10 +44,10 @@ const Home = () => {
     },
   });
 
+  // * UPDATE API functions
   const postCurrentUser = async () => {
     try {
       let { data } = await axios.post(API, {
-        // health: [100, 100],
         hunger: 100,
         happy: 100,
         bag: {
@@ -83,25 +85,16 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    if (!localStorage.getItem("id")) {
-      console.log("not found user");
-      postCurrentUser();
-    } else {
-      console.log("found user");
-      collectStartData();
-    }
-  }, []);
-
   async function updateUserInApi() {
     await axios.put(`${API}${localStorage.getItem("id")}`, {
-      // health: [hunger, happy],
       hunger,
       happy,
       bag: userBag,
     });
   }
 
+
+  // * CLICK ON function
   const clickOnBag = () => {
     // open and close bag
     bagVisibility === "hidden"
@@ -139,6 +132,18 @@ const Home = () => {
     }, 2000);
   };
 
+
+  //* rendering methods
+  useEffect(() => {
+    if (!localStorage.getItem("id")) {
+      console.log("not found user");
+      postCurrentUser();
+    } else {
+      console.log("found user");
+      collectStartData();
+    }
+  }, []);
+
   useEffect(
     () => {
       setTimeout(async () => {
@@ -152,7 +157,7 @@ const Home = () => {
   );
 
   return (
-    <div>
+    <div className="home">
       <PugStage />
       <LifeBarsBoard foodAmount={hunger} happinessAmount={happy} />
       <Button img={bagImg} onClickFunc={clickOnBag} />
@@ -167,3 +172,6 @@ const Home = () => {
 };
 
 export default Home;
+
+// TODO:
+// render don't work as expected -> bars don't update correctly.
