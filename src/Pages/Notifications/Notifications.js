@@ -1,7 +1,13 @@
+// import axios from "axios";
+import { useEffect } from "react";
 import NotificationWindow from "../../Components/NotificationWindow/NotificationWindow.Component";
-import './Notifications.css'
+import "./Notifications.css";
 
 function Notifications() {
+  useEffect(() => {
+
+  });
+
   return (
     <div className="notifications">
       <h1>Notifications Board</h1>
