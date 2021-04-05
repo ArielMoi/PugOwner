@@ -147,6 +147,7 @@ const Home = (props) => {
       console.log("found user");
       collectStartData();
     }
+    return () => updateUserInApi();
   }, []);
 
   // useEffect( // each health change
@@ -155,11 +156,23 @@ const Home = (props) => {
   //       await setHunger(hunger >= 5 && hunger - 5);
   //       await setHappy(happy >= 5 && happy - 5);
   //       updateUserInApi();
-  //     }, 30000); // 900000 -> 15min
-  //   },
-  //   [hunger, happy],
-  //   []
+  //     }, 7000); // 900000 -> 15min
+  //   }, []
   // );
+
+  useEffect(() => {
+    const hungerTimeout = setTimeout(() => {
+      setHunger(hunger >= 5 && hunger - 5);
+    }, 5000);
+    return () => clearTimeout(hungerTimeout);
+  }, [hunger]);
+
+  useEffect(() => {
+    const happyTimeout = setTimeout(() => {
+      setHappy(happy >= 5 && happy - 5);
+    }, 5000);
+    return () => clearTimeout(happyTimeout);
+  }, [happy]);
 
   // * TAKE PIC OPTION
 
@@ -173,23 +186,23 @@ const Home = (props) => {
   };
 
   const userInput = useRef(null);
-  let pugIndex = Math.floor(Math.random() * 11);
+  let pugIndex = Math.floor(Math.random() * 11); // randomize pug picture
 
   const clickSubmit = async () => {
-    setAlbumNotes({ ...albumNotes, [userInput.current.value]: [pugIndex] });
+    setAlbumNotes({ ...albumNotes, [userInput.current.value]: [pugIndex] }); // update in state of album notes
 
     try {
-      await axios.put(`${API}${localStorage.getItem("id")}`, {
+      await axios.put(`${API}${localStorage.getItem("id")}`, { // add to data in api
         album: { ...albumNotes, [userInput.current.value]: [pugIndex] },
       });
     } catch (e) {
       console.log(e);
     }
 
-    userInput.current.value = "";
+    userInput.current.value = ""; // reset text area input
     await clickOnTakePicture(); // to close pic window
     pugIndex = Math.floor(Math.random() * 11); // initializing pug index
-  };;
+  };
 
   return (
     <div className="Home">
