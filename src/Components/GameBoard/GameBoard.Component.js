@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 const GameBoard = () => {
   const [boardObj, setBoardObj] = useState({});
   let key = 0;
+
   // initalizing board
   useEffect(() => {
     const tempBoardObj = {};
@@ -29,34 +30,30 @@ const GameBoard = () => {
         }
       }
       await setBoardObj(tempBoardObj);
+      console.log(boardObj);
     };
+
     createBaseWorld();
-    let ar = ["bush", "rock", "wall"];
-    obstacleCreator(ar[Math.floor(Math.random() * ar.length)]);
+
+    // let ar = ["bush", "rock", "wall"];
+    // obstacleCreator(ar[Math.floor(Math.random() * ar.length)]);
   }, []);
 
+  useEffect(() => {
+    console.log("-updated");
+    console.log(boardObj);
+  }, [boardObj]);
+
+  // useEffect(() => {
+  //   console.log(boardObj);
+  //   let ar = ["bush", "rock", "wall"];
+  //   obstacleCreator(ar[Math.floor(Math.random() * ar.length)]);
+  // }, []);
+
+  //   let ar = ["bush", "rock", "wall"];
+  //   obstacleCreator(ar[Math.floor(Math.random() * ar.length)]);
+
   const obstacleCreator = (obstacle) => {
-    //   console.log(arrayOfObstacles);
-    //   let obstacle = arrayOfObstacles[Math.random(Math.floor() * arrayOfObstacles.length)]
-    // console.log(obstacle);
-
-    // const worldCreator = (
-    //   obstacle,
-    //   columnStart = 23,
-    //   rowStart = 0,
-    //   rowEnd = 15
-    // ) => {
-    //   const tempBoardObj = boardObj;
-    //   let key = 0;
-    //   for (let row = rowStart; row < rowEnd; row++) {
-    //     for (let column = columnStart; column < 25; column++) {
-    //       tempBoardObj[`${row}.${column}`] = (
-    //         <div className={obstacle} key={key++} />
-    //       );
-    //     }
-    //   }
-    // };
-
     function obstacleMaker(
       material,
       rowStart = 1,
@@ -66,6 +63,7 @@ const GameBoard = () => {
     ) {
       let key = 0;
       const tempBoardObj = { ...boardObj };
+      console.log(boardObj);
       console.log(tempBoardObj);
       for (let row = 0; row <= 20; row++) {
         for (let column = 0; column <= 25; column++) {
@@ -75,19 +73,14 @@ const GameBoard = () => {
             row >= rowStart &&
             row <= rowEnd
           ) {
-            tempBoardObj[`${row}.${column}`] = (
+            boardObj[`${row}.${column}`] = (
               <div className={material} key={key++} />
             );
           }
-          //   else {
-          //       console.log(boardObj[`${row}.${column}`]);
-          //       console.log('-----');
-          //     tempBoardObj[`${row}.${column}`] = boardObj[`${row}.${column}`];
-          //   }
         }
       }
       console.log(tempBoardObj);
-      setBoardObj(tempBoardObj);
+      setBoardObj(boardObj);
     }
 
     switch (obstacle) {
@@ -96,7 +89,7 @@ const GameBoard = () => {
         obstacleMaker("grass", 0, 3, 22, 24);
         break;
       case "rock":
-        console.log("rr");
+        console.log("rock");
         obstacleMaker("rock", 10, 13, 22, 24);
         break;
       case "wall":
@@ -107,9 +100,6 @@ const GameBoard = () => {
         break;
     }
   };
-
-  //   let ar = ["bush", "rock", "wall"];
-  //   obstacleCreator(ar[Math.floor(Math.random() * ar.length)]);
 
   return (
     <div className="game-board">
