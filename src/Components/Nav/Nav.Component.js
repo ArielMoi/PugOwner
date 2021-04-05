@@ -12,7 +12,7 @@ function Nav() {
           <Link to="/MyAlbum">MyAlbum</Link>
         </li>
         <li>
-          <Link to="/Shop">Shop</Link>
+          <Link to="/GameShop">GameShop</Link>
         </li>
       </ol>
     </div>

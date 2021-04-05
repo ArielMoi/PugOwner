@@ -21,9 +21,10 @@ function Album() {
   }, []);
 
   // update album in api func
-  const updateAlbumInApi = async () => {
+  const updateAlbumInApi = async () => { // ! doesn't update correctly the api - BUG
     try {
-      let { data } = await axios.put(`${API}${localStorage.getItem("id")}`, {
+      let { data } = await axios.patch(`${API}${localStorage.getItem("id")}`, {
+        // album,
         album: { ...album },
       });
 
@@ -38,37 +39,57 @@ function Album() {
     let updatedAlbum = { ...album };
     await delete updatedAlbum[mes];
     await setAlbum(updatedAlbum);
-    console.log(updatedAlbum); // *
-    console.log(album); // ! album not updating to updated album
-    updateAlbumInApi();
+    updateAlbumInApi(); //!
   };
 
-
+  // edit functions
   const [editVisibility, setEditVisibility] = useState("hidden");
   const [currentNote, setCurrentNote] = useState('')
+  const [beforeEditNote, setBeforeEditNote] = useState('')
 
-  // edit func
   const editFromAlbum = async (note) => {
     setCurrentNote(note);
-
-    editVisibility === "hidden"
-      ? setEditVisibility("visible")
-      : setEditVisibility("hidden");
-
-      // adding the Submit
-      // change album and api data
+    setBeforeEditNote(note); // keeping refrence to the unchanged not
+    setEditVisibility("visible");
   };
+
+  const editTextAlbumNote = (editedNote) => {
+    setCurrentNote(editedNote);
+  }
+
+  const submitEdit = () => {
+    // iterating over the obj to keep the order
+    let updatedAlbum = {}
+    Object.entries(album).forEach(([note, pugIndex]) => {
+      note === beforeEditNote
+        ? (updatedAlbum[currentNote] = pugIndex)
+        : (updatedAlbum[note] = pugIndex);
+    })
+
+    // console.log(updatedAlbum);
+    setAlbum(updatedAlbum);
+    setEditVisibility("hidden");
+    updateAlbumInApi(); // !
+  }
 
   let key = 0;
   return (
     <div className="Album">
       <EditAlbumNoteWindow
-        input={<textarea value={currentNote} rows="4" cols="50" />}
+        input={
+          <textarea
+            value={currentNote}
+            rows="4"
+            cols="50"
+            onChange={(e) => editTextAlbumNote(e.target.value)}
+          />
+        }
         visibility={editVisibility}
+        onClickExit={() => setEditVisibility("hidden")}
+        onClickSubmit={submitEdit}
       />
       <h1>My Album Board</h1>
       <div className="album-grid">
-        {/* iterate over album to extract all notes. */}
         {Object.entries(album).map(([note, PugIndex]) => (
           <AlbumNote
             key={key++}
