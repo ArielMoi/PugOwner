@@ -7,7 +7,7 @@
   justify-content: center;
   align-items: center;
   border: 1px solid black;
-  position: absolute;
+  position: fixed;
   top: 40%;
   left: 45%;
   margin-right: -50%;

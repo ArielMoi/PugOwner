@@ -26,15 +26,10 @@ const pugPics = {
   11: pug11,
 };
 
-
 function EditAlbumNoteWindow(props) {
   return (
     <div className="edit-window" style={{ visibility: props.visibility }}>
-      <img
-        src={pugPics[props.pugIndex]}
-        alt="pug"
-      />
-      {/* <textarea ref={userInput} rows="4" cols="50" /> */}
+      <img src={pugPics[props.pugIndex]} alt="pug" />
       {props.input}
       <button onClick={props.onClickSubmit} type="submit">
         Submit

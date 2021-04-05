@@ -42,11 +42,13 @@ function Album() {
   const [editVisibility, setEditVisibility] = useState("hidden");
   const [currentNote, setCurrentNote] = useState('')
   const [beforeEditNote, setBeforeEditNote] = useState('')
+  const [currentPugEdited, setCurrentPugEdited] = useState(1)
 
-  const editFromAlbum = async (note) => {
+  const editFromAlbum = async (note, pugIndex) => {
     setCurrentNote(note);
     setBeforeEditNote(note); // keeping refrence to the unchanged not
     setEditVisibility("visible");
+    setCurrentPugEdited(pugIndex)
   };
 
   const editTextAlbumNote = (editedNote) => {
@@ -57,6 +59,7 @@ function Album() {
     // iterating over the obj to keep the order
     let updatedAlbum = {}
     Object.entries(album).forEach(([note, pugIndex]) => {
+      console.log(pugIndex);
       note === beforeEditNote
         ? (updatedAlbum[currentNote] = pugIndex)
         : (updatedAlbum[note] = pugIndex);
@@ -83,16 +86,17 @@ function Album() {
         visibility={editVisibility}
         onClickExit={() => setEditVisibility("hidden")}
         onClickSubmit={submitEdit}
+        pugIndex={currentPugEdited}
       />
       <h1>My Album Board</h1>
       <div className="album-grid">
-        {Object.entries(album).map(([note, PugIndex]) => (
+        {Object.entries(album).map(([note, pugIndex]) => (
           <AlbumNote
             key={key++}
             message={note}
-            pugNum={PugIndex}
+            pugNum={pugIndex}
             deleteClick={() => deleteFromAlbum(note)}
-            editClick={() => editFromAlbum(note)}
+            editClick={() => editFromAlbum(note, pugIndex)}
           />
         ))}
       </div>
