@@ -1,8 +1,14 @@
+.Home {
+  height: 92vh;
+  padding-top: 60px;
+}
+
 .home-btn {
   background: transparent;
   padding: 5px;
   /* float: right;0/0 */
   position: absolute;
+  top: 45px;
   right: 5px;
   margin: 10px;
 }

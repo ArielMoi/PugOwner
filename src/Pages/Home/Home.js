@@ -163,19 +163,19 @@ const Home = (props) => {
   useEffect(() => {
     const hungerTimeout = setTimeout(() => {
       setHunger(hunger >= 5 && hunger - 5);
-    }, 5000);
+    }, 50000);
     return () => clearTimeout(hungerTimeout);
   }, [hunger]);
 
   useEffect(() => {
     const happyTimeout = setTimeout(() => {
       setHappy(happy >= 5 && happy - 5);
-    }, 5000);
+    }, 50000);
     return () => clearTimeout(happyTimeout);
   }, [happy]);
 
+  
   // * TAKE PIC OPTION
-
   const [picVisibility, setPicVisibility] = useState("hidden");
 
   const clickOnTakePicture = () => {

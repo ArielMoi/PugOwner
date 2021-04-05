@@ -100,16 +100,52 @@ const GameBoard = () => {
     let tempBoardObj = {};
     Object.entries(boardObj).forEach(([position, element]) => {
       const [row, column] = position.split(".");
-      if (column !== 0) {
+      if (Number(column) !== 0) {
+        console.log(column);
         console.log(`${row}.${Number(column) - 1}`);
-        tempBoardObj[`${row}.${Number(column) - 1}`] = element;
+        if (Number(row) == 14) {
+          tempBoardObj[`${row}.${column}`] = (
+            <div className="land" key={key++} />
+          );
+        } else {
+          tempBoardObj[`${row}.${Number(column) - 1}`] = element;
+        }
       } else {
-        console.log('0');
-        // tempBoardObj[`${row}.${24}`] = element;
+        console.log("0 ----");
+        if (Number(row) == 14) {
+          tempBoardObj[`${row}.${24}`] = <div className="land" key={key++} />;
+        } else {
+          tempBoardObj[`${row}.${24}`] = element;
+        }
       }
     });
 
-    setBoardObj(tempBoardObj);
+    orderAndRenderBoard(tempBoardObj);
+    // setBoardObj(tempBoardObj);
+  };
+
+  // func to re-order boardObj
+  const orderAndRenderBoard = (unOrderedObj) => {
+    const orderedBoardObj = {};
+    for (let row = 0; row < 15; row++) {
+      for (let column = 0; column < 25; column++) {
+        orderedBoardObj[`${row}.${column}`] = unOrderedObj[`${row}.${column}`];
+      }
+    }
+
+    for (let row = 0; row < 15; row++) {
+      for (let column = 0; column < 25; column++) {
+        if (
+          orderedBoardObj[`${row}.${column}`] !==
+          unOrderedObj[`${row}.${column}`]
+        ) {
+          console.log(orderedBoardObj[`${row}.${column}`]);
+          console.log(unOrderedObj[`${row}.${column}`]);
+        }
+      }
+    }
+
+    setBoardObj(orderedBoardObj);
   };
 
   return (

@@ -5,6 +5,8 @@
 
 .life-bar p {
   width: 110px;
+  margin-left: 20px;
+  background: wheat;
 }
 
 .bar-container {
@@ -21,4 +23,5 @@
 .bar p {
   margin-left: 40px;
   color: #fff;
+  background: none;
 }

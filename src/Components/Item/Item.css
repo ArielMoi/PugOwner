@@ -5,13 +5,10 @@
 }
 
 .item {
-  border: 1px solid black;
   width: 80px;
   height: 80px;
   display: flex;
   flex-direction: column;
-  position: relative;
-  border-radius: 20px;
 }
 
 .item img {
@@ -20,7 +17,7 @@
 
 .item-details {
   position: absolute;
-  bottom: 0;
+  bottom: 15px;
   margin: 5px;
 }
 

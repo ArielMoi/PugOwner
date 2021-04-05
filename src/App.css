@@ -6,9 +6,11 @@
 
 .App {
   background: url("./img/bg-living-room.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
   background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  background-size: cover;
 }
 
 button:focus {

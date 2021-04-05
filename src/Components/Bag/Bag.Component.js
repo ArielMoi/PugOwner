@@ -7,7 +7,7 @@ const Bag = (props) => {
   let key = 0;
   Object.entries(props.bagObj.food).forEach(([name, [item,amount]]) => {
     // iterate over the obj and creating the items accordingly
-    foods.push(
+    Number(amount) > 0 && foods.push(
       <Item
         onClickItem={props.clickOnItem}
         key={key++}
@@ -19,7 +19,7 @@ const Bag = (props) => {
   });
 
   Object.entries(props.bagObj.toys).forEach(([name, [item, amount]]) => {
-    toys.push(
+    Number(amount) > 0 && toys.push(
       <Item
         onClickItem={props.clickOnItem}
         key={key++}

@@ -3,7 +3,7 @@ import "./AlbumNote.css";
 import pug1 from "../../img/cool-pug.png";
 import pug2 from "../../img/drinking-pug.jpg";
 import pug3 from "../../img/go-to-school-pug.jpg";
-import pug4 from "../../img/jetpack-pug.jpg";
+import pug4 from "../../img/jetpack-pug.png";
 import pug5 from "../../img/magican-pug.jpg";
 import pug6 from "../../img/music_pug.jpg";
 import pug7 from "../../img/pug-dead.jpg";
