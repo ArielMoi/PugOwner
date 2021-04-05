@@ -1,6 +1,5 @@
 import "./GameBoard.css";
 import { useState, useEffect } from "react";
-import LifeBarsBoard from "../LifeBarsBoard/LifeBarsBoard.Component";
 
 const GameBoard = () => {
   const [boardObj, setBoardObj] = useState({});
@@ -43,7 +42,7 @@ const GameBoard = () => {
       columnEnd = 25
     ) {
       let key = 300;
-      Object.entries(boardObj).map(([position, element]) => {
+      Object.entries(boardObj).forEach(([position, element]) => {
         const [row, column] = position.split(".");
         if (
           Number(columnStart) <= column &&
@@ -98,11 +97,10 @@ const GameBoard = () => {
 
   // func to move obstacles
   const startMovingObstacles = () => {
-    let key = 300;
     let tempBoardObj = {};
-    Object.entries(boardObj).map(([position, element]) => {
+    Object.entries(boardObj).forEach(([position, element]) => {
       const [row, column] = position.split(".");
-      if (column != 0) {
+      if (column !== 0) {
         console.log(`${row}.${Number(column) - 1}`);
         tempBoardObj[`${row}.${Number(column) - 1}`] = element;
       } else {

@@ -84,6 +84,8 @@ const Home = (props) => {
       setHappy(data.happy);
       setUserBag(data.bag);
       setAlbumNotes(data.album);
+
+      // localStorage.setItem("data", JSON.stringify(data));
     } catch (e) {
       console.log(e);
     }
@@ -177,11 +179,9 @@ const Home = (props) => {
     setAlbumNotes({ ...albumNotes, [userInput.current.value]: [pugIndex] });
 
     try {
-      let { data } = await axios.put(`${API}${localStorage.getItem("id")}`, {
+      await axios.put(`${API}${localStorage.getItem("id")}`, {
         album: { ...albumNotes, [userInput.current.value]: [pugIndex] },
       });
-
-      console.log(data);
     } catch (e) {
       console.log(e);
     }

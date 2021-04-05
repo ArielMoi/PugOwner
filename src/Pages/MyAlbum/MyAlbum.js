@@ -21,25 +21,21 @@ function Album() {
   }, []);
 
   // update album in api func
-  const updateAlbumInApi = async () => { // ! doesn't update correctly the api - BUG
+  const updateAlbumInApi = async () => { 
     try {
-      let { data } = await axios.patch(`${API}${localStorage.getItem("id")}`, {
-        // album,
+      await axios.put(`${API}${localStorage.getItem("id")}`, {
         album: { ...album },
       });
-
-      console.log(data);
     } catch (e) {
       console.log(e);
     }
   };
 
   // delete func
-  const deleteFromAlbum = async (mes) => {
+  const deleteFromAlbum = (mes) => {
     let updatedAlbum = { ...album };
-    await delete updatedAlbum[mes];
-    await setAlbum(updatedAlbum);
-    updateAlbumInApi(); //!
+    delete updatedAlbum[mes];
+    setAlbum(updatedAlbum);
   };
 
   // edit functions
@@ -65,12 +61,12 @@ function Album() {
         ? (updatedAlbum[currentNote] = pugIndex)
         : (updatedAlbum[note] = pugIndex);
     })
-
-    // console.log(updatedAlbum);
     setAlbum(updatedAlbum);
     setEditVisibility("hidden");
-    updateAlbumInApi(); // !
   }
+  useEffect(()=>{
+    updateAlbumInApi();
+  }, [album])
 
   let key = 0;
   return (
