@@ -1,5 +1,6 @@
 import "./GameBoard.css";
 import { useState, useEffect } from "react";
+import LifeBarsBoard from "../LifeBarsBoard/LifeBarsBoard.Component";
 
 const GameBoard = () => {
   const [boardObj, setBoardObj] = useState({});
@@ -9,7 +10,7 @@ const GameBoard = () => {
   useEffect(() => {
     const tempBoardObj = {};
 
-    const createBaseWorld = async () => {
+    const createBaseWorld = () => {
       for (let row = 0; row < 15; row++) {
         for (let column = 0; column < 25; column++) {
           if (row === 14) {
@@ -22,38 +23,18 @@ const GameBoard = () => {
             );
           } else {
             tempBoardObj[`${row}.${column}`] = (
-              <div key={key++}>
-                {row}.{column}
-              </div>
+              <div key={key++}>{/* {row}.{column} */}</div>
             );
           }
         }
       }
-      await setBoardObj(tempBoardObj);
-      console.log(boardObj);
+      setBoardObj(tempBoardObj);
     };
-
     createBaseWorld();
-
-    // let ar = ["bush", "rock", "wall"];
-    // obstacleCreator(ar[Math.floor(Math.random() * ar.length)]);
   }, []);
 
-  useEffect(() => {
-    console.log("-updated");
-    console.log(boardObj);
-  }, [boardObj]);
-
-  // useEffect(() => {
-  //   console.log(boardObj);
-  //   let ar = ["bush", "rock", "wall"];
-  //   obstacleCreator(ar[Math.floor(Math.random() * ar.length)]);
-  // }, []);
-
-  //   let ar = ["bush", "rock", "wall"];
-  //   obstacleCreator(ar[Math.floor(Math.random() * ar.length)]);
-
   const obstacleCreator = (obstacle) => {
+    const tempBoardObj = {};
     function obstacleMaker(
       material,
       rowStart = 1,
@@ -61,26 +42,22 @@ const GameBoard = () => {
       columnStart = 1,
       columnEnd = 25
     ) {
-      let key = 0;
-      const tempBoardObj = { ...boardObj };
-      console.log(boardObj);
-      console.log(tempBoardObj);
-      for (let row = 0; row <= 20; row++) {
-        for (let column = 0; column <= 25; column++) {
-          if (
-            column >= columnStart &&
-            column <= columnEnd &&
-            row >= rowStart &&
-            row <= rowEnd
-          ) {
-            boardObj[`${row}.${column}`] = (
-              <div className={material} key={key++} />
-            );
-          }
+      let key = 300;
+      Object.entries(boardObj).map(([position, element]) => {
+        const [row, column] = position.split(".");
+        if (
+          Number(columnStart) <= column &&
+          column <= Number(columnEnd) &&
+          Number(rowStart) <= row &&
+          row <= Number(rowEnd)
+        ) {
+          tempBoardObj[`${row}.${column}`] = (
+            <div className={material} key={key++} />
+          );
+        } else {
+          tempBoardObj[`${row}.${column}`] = element;
         }
-      }
-      console.log(tempBoardObj);
-      setBoardObj(boardObj);
+      });
     }
 
     switch (obstacle) {
@@ -94,16 +71,55 @@ const GameBoard = () => {
         break;
       case "wall":
         console.log("wall");
-        obstacleMaker("rock", 10, 13, 22, 24);
+        obstacleMaker("rock", 7, 13, 23, 24);
         break;
       default:
         break;
     }
+
+    setBoardObj(tempBoardObj);
+  };
+
+  const startGame = () => {
+    let obstaclesArray = ["bush", "rock", "wall"];
+
+    obstacleCreator(
+      obstaclesArray[Math.floor(Math.random() * obstaclesArray.length)]
+    );
+
+    // setTimeout(() => {
+    //   obstacleCreator(
+    //     obstaclesArray[Math.floor(Math.random() * obstaclesArray.length)]
+    //   );
+    // }, 1000);
+
+    setTimeout(startMovingObstacles, 2500);
+  };
+
+  // func to move obstacles
+  const startMovingObstacles = () => {
+    let key = 300;
+    let tempBoardObj = {};
+    Object.entries(boardObj).map(([position, element]) => {
+      const [row, column] = position.split(".");
+      if (column != 0) {
+        console.log(`${row}.${Number(column) - 1}`);
+        tempBoardObj[`${row}.${Number(column) - 1}`] = element;
+      } else {
+        console.log('0');
+        // tempBoardObj[`${row}.${24}`] = element;
+      }
+    });
+
+    setBoardObj(tempBoardObj);
   };
 
   return (
-    <div className="game-board">
-      {Object.values(boardObj).map((divs) => divs)}
+    <div>
+      <button onClick={startGame}>start</button>
+      <div className="game-board">
+        {Object.values(boardObj).map((div) => div)}
+      </div>
     </div>
   );
 };
