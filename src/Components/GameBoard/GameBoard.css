@@ -1,0 +1,38 @@
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(25, 1fr);
+  margin: 5px;
+  background: skyblue;
+}
+
+.game-board > div {
+  height: 30px;
+}
+
+.land {
+  background-image: url("../../img/grass.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.rock {
+  background-image: url("../../img/rock.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.grass {
+  background-image: url("../../img/tree-leaves.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.pug {
+  background-image: url("../../img/jetpack-pug.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}

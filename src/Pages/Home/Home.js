@@ -10,12 +10,12 @@ import CreatePugPic from "../../Components/CreatePugPic/CreatePugPic.Component";
 
 //imgs
 import bagImg from "../../img/bag.png";
-import appleImg from "../../img/apple.jpg";
+import appleImg from "../../img/apple.png";
 import bananaImg from "../../img/banana.jpg";
 import bawlImg from "../../img/bawl-food.jpg";
 import chickenImg from "../../img/chicken.jpg";
-import ballToy from "../../img/ball.jpg";
-import ballsToy from "../../img/balls.jpg";
+import ballToy from "../../img/ball.png";
+import ballsToy from "../../img/balls.png";
 import chewingToy from "../../img/chweing-toy.jpg";
 import stickToy from "../../img/stick.jpg";
 
