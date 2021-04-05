@@ -32,7 +32,7 @@ function EditAlbumNoteWindow(props) {
       <img src={pugPics[props.pugIndex]} alt="pug" />
       {props.input}
       <button onClick={props.onClickSubmit} type="submit">
-        Submit
+        Edit
       </button>
       <button onClick={props.onClickExit} id="x">
         <i className="fas fa-times-circle"></i>

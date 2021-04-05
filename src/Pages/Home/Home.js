@@ -174,7 +174,7 @@ const Home = (props) => {
     return () => clearTimeout(happyTimeout);
   }, [happy]);
 
-  
+
   // * TAKE PIC OPTION
   const [picVisibility, setPicVisibility] = useState("hidden");
 
@@ -190,7 +190,7 @@ const Home = (props) => {
 
   const clickSubmit = async () => {
     setAlbumNotes({ ...albumNotes, [userInput.current.value]: [pugIndex] }); // update in state of album notes
-
+    localStorage.setItem("album", JSON.stringify(albumNotes));
     try {
       await axios.put(`${API}${localStorage.getItem("id")}`, { // add to data in api
         album: { ...albumNotes, [userInput.current.value]: [pugIndex] },

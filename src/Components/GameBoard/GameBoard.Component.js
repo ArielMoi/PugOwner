@@ -103,7 +103,7 @@ const GameBoard = () => {
       if (Number(column) !== 0) {
         console.log(column);
         console.log(`${row}.${Number(column) - 1}`);
-        if (Number(row) == 14) {
+        if (Number(row) === 14) {
           tempBoardObj[`${row}.${column}`] = (
             <div className="land" key={key++} />
           );
@@ -112,7 +112,7 @@ const GameBoard = () => {
         }
       } else {
         console.log("0 ----");
-        if (Number(row) == 14) {
+        if (Number(row) === 14) {
           tempBoardObj[`${row}.${24}`] = <div className="land" key={key++} />;
         } else {
           tempBoardObj[`${row}.${24}`] = element;

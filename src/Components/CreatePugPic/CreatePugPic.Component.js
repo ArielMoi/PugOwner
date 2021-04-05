@@ -37,7 +37,7 @@ function CreatePugPic(props){
         {/* <textarea ref={userInput} rows="4" cols="50" /> */}
         {props.input}
         <button onClick={props.onClickSubmit} type="submit">
-          Submit
+          Post
         </button>
         <button onClick={props.onClickExit} id="x">
           <i className="fas fa-times-circle"></i>

@@ -15,13 +15,25 @@ function Album() {
     const collectAlbum = async () => {
       let { data } = await axios.get(`${API}${localStorage.getItem("id")}`);
       setAlbum(data.album);
+      localStorage.setItem("album", JSON.stringify(data.album));
     };
 
-    collectAlbum();
+    // adding local storage for quicker reloading user experience
+    if (!localStorage.getItem("album")) {
+      try {
+        collectAlbum();
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      setAlbum(JSON.parse(localStorage.getItem("album")));
+    }
+
+    return () => updateAlbumInApi();
   }, []);
 
   // update album in api func
-  const updateAlbumInApi = async () => { 
+  const updateAlbumInApi = async () => {
     try {
       await axios.put(`${API}${localStorage.getItem("id")}`, {
         album: { ...album },
@@ -40,36 +52,37 @@ function Album() {
 
   // edit functions
   const [editVisibility, setEditVisibility] = useState("hidden");
-  const [currentNote, setCurrentNote] = useState('')
-  const [beforeEditNote, setBeforeEditNote] = useState('')
-  const [currentPugEdited, setCurrentPugEdited] = useState(1)
+  const [currentNote, setCurrentNote] = useState("");
+  const [beforeEditNote, setBeforeEditNote] = useState("");
+  const [currentPugEdited, setCurrentPugEdited] = useState(1);
 
   const editFromAlbum = async (note, pugIndex) => {
     setCurrentNote(note);
     setBeforeEditNote(note); // keeping refrence to the unchanged not
     setEditVisibility("visible");
-    setCurrentPugEdited(pugIndex)
+    setCurrentPugEdited(pugIndex);
   };
 
   const editTextAlbumNote = (editedNote) => {
     setCurrentNote(editedNote);
-  }
+  };
 
   const submitEdit = () => {
     // iterating over the obj to keep the order
-    let updatedAlbum = {}
+    let updatedAlbum = {};
     Object.entries(album).forEach(([note, pugIndex]) => {
       console.log(pugIndex);
       note === beforeEditNote
         ? (updatedAlbum[currentNote] = pugIndex)
         : (updatedAlbum[note] = pugIndex);
-    })
+    });
     setAlbum(updatedAlbum);
     setEditVisibility("hidden");
-  }
-  useEffect(()=>{
-    updateAlbumInApi();
-  }, [album])
+  };
+
+  useEffect(() => {
+    localStorage.setItem("album", JSON.stringify(album));
+  }, [album]);
 
   let key = 0;
   return (
