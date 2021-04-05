@@ -32,8 +32,6 @@ const Bag = (props) => {
 
   return (
     <div className="bag" style={{ visibility: props.visibility }}>
-      <h1>YOUR BAG</h1>
-
       <div>
         <h3 className="bag-type-header">Food</h3>
         <div className="bag-type">{foods}</div>
