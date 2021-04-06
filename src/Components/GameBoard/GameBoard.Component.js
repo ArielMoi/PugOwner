@@ -1,6 +1,7 @@
 import "./GameBoard.css";
 import { useState, useEffect, useRef } from "react";
 import Item from "../Item/Item.Component";
+import axios from "axios";
 
 import appleImg from "../../img/apple.png";
 import bananaImg from "../../img/banana.png";
@@ -10,6 +11,8 @@ import ballToy from "../../img/ball.png";
 import ballsToy from "../../img/balls.png";
 import chewingToy from "../../img/chawing-toy.png";
 import stickToy from "../../img/stick.png";
+
+const API = `https://605b251627f0050017c0645f.mockapi.io/users/`;
 
 const GameBoard = () => {
   let key = 0;
@@ -124,6 +127,8 @@ const GameBoard = () => {
 
       first = false; // *
     }
+
+    window.addEventListener("mouseover", meetObstacle);
     gameScreen.current.classList.remove("stop-game");
   };
 
@@ -172,7 +177,7 @@ const GameBoard = () => {
         }
 
         setGameBag(bag);
-        cleanItemInBoard(event.target.classList[0]);
+        // cleanItemInBoard(event.target.classList[0]);
         // event.target.classList.remove(event.target.classList[0]); // doesn't work cause moving world keep updating -> disappea for only a sec
       } else if (
         // if obstacle
@@ -189,14 +194,15 @@ const GameBoard = () => {
     return () => window.removeEventListener("mouseover", meetObstacle);
   }, []);
 
-  const cleanItemInBoard = (item) => { // ! dont work.
+  const cleanItemInBoard = (item) => {
+    // ! dont work.
     let boardWithoutItem = board.map((row) =>
       row.map((element) => {
         if (item == element.key) {
           console.log("match");
           return <div />;
         } else {
-          console.log('not');
+          console.log("not");
           return element;
         }
       })
@@ -224,10 +230,43 @@ const GameBoard = () => {
     });
   };
 
+  // -----------------------------------
+  const [data, setData] = useState({});
+  const collectStartData = async () => {
+    try {
+      let id = localStorage.getItem("id");
+      let { data } = await axios.get(`${API}${id}`);
+
+      setData(data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const updateAlbumInApi = async () => {
+    try {
+      await axios.put(`${API}${localStorage.getItem("id")}`, {
+        album: data.album,
+        hunger: data.hunger,
+        happy: data.happy,
+        bag: gameBag,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const collectMaterial = async () => {
+    await collectStartData();
+    await updateAlbumInApi();
+    resetBag();
+  };
+
   return (
     <div id="game">
       <div className="header">
         <button onClick={startGame}>Start Game</button>
+        <button onClick={collectMaterial}>collect material</button>
         <div className="game-bag">
           {Object.values(gameBag.food).map(([img, amount]) => (
             <Item imgUrl={img} amount={amount} />
@@ -241,9 +280,7 @@ const GameBoard = () => {
         </button>
       </div>
       <div ref={gameScreen} className="game-board">
-        {board.map((row) =>
-          row.map((element) => element)
-        )}
+        {board.map((row) => row.map((element) => element))}
       </div>
     </div>
   );

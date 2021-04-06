@@ -204,41 +204,6 @@ const Home = () => {
 
   // --------------------------------------------------
 
-  const [lastTime, setLastTime] = useState([]);
-  const [newTime, setNewTime] = useState([
-    new Date().getHours(),
-    new Date().getMinutes(),
-  ]);
-
-  useEffect(() => {
-    let now = new Date();
-    setLastTime([now.getHours(), now.getMinutes()]);
-  }, []);
-
-  const calculateTime = () => {
-    // if (lastTime[1] !== newTime[1]) {
-    setTimeout(() => {
-      let now = new Date();
-      if (newTime[1] != now.getMinutes()) {
-        console.log(newTime[1]);
-        console.log(now.getMinutes());
-        setNewTime([now.getHours(), now.getMinutes()]);
-        console.log(now.getMinutes());
-      }
-    }, 10000);
-    // }
-  };
-
-  useEffect(() => {
-    setHunger(hunger >= 5 && hunger - 5);
-    setHappy(happy >= 5 && happy - 5);
-    updateUserInApi();
-  }, [newTime]);
-
-  useEffect(() => {
-    calculateTime();
-  });
-
   // --------------------------------
 
   return (
