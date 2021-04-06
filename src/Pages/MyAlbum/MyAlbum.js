@@ -9,6 +9,7 @@ const API = `https://605b251627f0050017c0645f.mockapi.io/users/`;
 
 function Album() {
   const [album, setAlbum] = useState({});
+  const [data, setData] = useState({});
 
   useEffect(() => {
     // collecting initializing data for the album
@@ -16,12 +17,14 @@ function Album() {
       let { data } = await axios.get(`${API}${localStorage.getItem("id")}`);
       setAlbum(data.album);
       localStorage.setItem("album", JSON.stringify(data.album));
+      localStorage.setItem("data", JSON.stringify(data));
     };
 
     // adding local storage for quicker reloading user experience
     if (!localStorage.getItem("album")) {
       try {
         collectAlbum();
+        setData(JSON.parse(localStorage.getItem("data")))
       } catch (e) {
         console.log(e);
       }
@@ -37,11 +40,15 @@ function Album() {
     try {
       await axios.put(`${API}${localStorage.getItem("id")}`, {
         album: { ...album },
-      });
+        hunger: data.hunger,
+        happy: data.happy,
+        bag: data.bag,
+      })
     } catch (e) {
       console.log(e);
     }
   };
+
 
   // delete func
   const deleteFromAlbum = (mes) => {

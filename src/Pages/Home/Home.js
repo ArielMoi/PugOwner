@@ -11,13 +11,13 @@ import CreatePugPic from "../../Components/CreatePugPic/CreatePugPic.Component";
 //imgs
 import bagImg from "../../img/bag.png";
 import appleImg from "../../img/apple.png";
-import bananaImg from "../../img/banana.jpg";
-import bawlImg from "../../img/bawl-food.jpg";
-import chickenImg from "../../img/chicken.jpg";
+import bananaImg from "../../img/banana.png";
+import bawlImg from "../../img/bawl-food.png";
+import chickenImg from "../../img/chicken.png";
 import ballToy from "../../img/ball.png";
 import ballsToy from "../../img/balls.png";
-import chewingToy from "../../img/chweing-toy.jpg";
-import stickToy from "../../img/stick.jpg";
+import chewingToy from "../../img/chawing-toy.png";
+import stickToy from "../../img/stick.png";
 
 const API = `https://605b251627f0050017c0645f.mockapi.io/users/`;
 
@@ -96,6 +96,7 @@ const Home = (props) => {
       hunger,
       happy,
       bag: userBag,
+      album: albumNotes,
     });
   }
 
@@ -192,8 +193,12 @@ const Home = (props) => {
     setAlbumNotes({ ...albumNotes, [userInput.current.value]: [pugIndex] }); // update in state of album notes
     localStorage.setItem("album", JSON.stringify(albumNotes));
     try {
-      await axios.put(`${API}${localStorage.getItem("id")}`, { // add to data in api
+      await axios.put(`${API}${localStorage.getItem("id")}`, {
+        // add to data in api
         album: { ...albumNotes, [userInput.current.value]: [pugIndex] },
+        hunger,
+        happy,
+        bag: userBag,
       });
     } catch (e) {
       console.log(e);

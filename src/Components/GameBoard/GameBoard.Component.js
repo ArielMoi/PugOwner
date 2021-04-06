@@ -2,7 +2,6 @@ import "./GameBoard.css";
 import { useState, useEffect } from "react";
 
 const GameBoard = () => {
-  const [boardObj, setBoardObj] = useState({});
   let key = 0;
   const [board, setBoard] = useState([]);
 
@@ -95,7 +94,6 @@ const GameBoard = () => {
   };
 
   const startGame = () => {
-
     setInterval(() => {
       obstacleCreator(
         ...arrayOfObstacles[Math.floor(Math.random() * arrayOfObstacles.length)]
@@ -107,17 +105,14 @@ const GameBoard = () => {
         Math.floor(Math.random() * 14),
         arrayOfItems[Math.floor(Math.random() * arrayOfItems.length)]
       );
-    }, 1750);
+    }, 3750);
 
     setInterval(moveWorld, 500);
   };
 
-  
   // create event listener for window - recognize mouse location
   useEffect(() => {
-    // const arrayOfObstaclesClasses = ["land", "rock", "grass"];
-    window.addEventListener("mouseover", (event) => {
-      // recognizing mouse (player) fail and contact obstacles
+    const meetObstacle = (event) => {
       if (
         event.target.classList.length > 0 &&
         !event.target.classList.contains("Nav")
@@ -125,61 +120,27 @@ const GameBoard = () => {
         console.log(event.target.classList);
         // evoke func of player fail
       }
-    });
+    };
+
+    const meetItem = (event) => {
+      if (
+        event.target.classList.length > 0 &&
+        !event.target.classList.contains("Nav")
+      ) {
+        console.log(event.target.classList);
+        // evoke func of player collecting
+      }
+    };
+
+    // const arrayOfObstaclesClasses = ["land", "rock", "grass"];
+    window.addEventListener("mouseover", meetObstacle);
+    window.addEventListener("mouseover", meetItem);
+
+    return () => {
+      window.removeEventListener("mouseover", meetObstacle);
+      window.removeEventListener("mouseover", meetItem);
+    };
   }, []);
-
-  // func to move obstacles
-  const startMovingObstacles = () => {
-    let tempBoardObj = {};
-    Object.entries(boardObj).forEach(([position, element]) => {
-      const [row, column] = position.split(".");
-      if (Number(column) !== 0) {
-        console.log(column);
-        console.log(`${row}.${Number(column) - 1}`);
-        if (Number(row) === 14) {
-          tempBoardObj[`${row}.${column}`] = (
-            <div className="land" key={key++} />
-          );
-        } else {
-          tempBoardObj[`${row}.${Number(column) - 1}`] = element;
-        }
-      } else {
-        console.log("0 ----");
-        if (Number(row) === 14) {
-          tempBoardObj[`${row}.${24}`] = <div className="land" key={key++} />;
-        } else {
-          tempBoardObj[`${row}.${24}`] = element;
-        }
-      }
-    });
-
-    orderAndRenderBoard(tempBoardObj);
-    // setBoardObj(tempBoardObj);
-  };
-
-  // func to re-order boardObj
-  const orderAndRenderBoard = (unOrderedObj) => {
-    const orderedBoardObj = {};
-    for (let row = 0; row < 15; row++) {
-      for (let column = 0; column < 25; column++) {
-        orderedBoardObj[`${row}.${column}`] = unOrderedObj[`${row}.${column}`];
-      }
-    }
-
-    for (let row = 0; row < 15; row++) {
-      for (let column = 0; column < 25; column++) {
-        if (
-          orderedBoardObj[`${row}.${column}`] !==
-          unOrderedObj[`${row}.${column}`]
-        ) {
-          console.log(orderedBoardObj[`${row}.${column}`]);
-          console.log(unOrderedObj[`${row}.${column}`]);
-        }
-      }
-    }
-
-    setBoardObj(orderedBoardObj);
-  };
 
   return (
     <div>

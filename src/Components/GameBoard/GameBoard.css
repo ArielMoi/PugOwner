@@ -39,21 +39,21 @@
 }
 
 .banana {
-  background-image: url("../../img/banana.jpg");
+  background-image: url("../../img/banana.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
 
 .bawl {
-  background-image: url("../../img/bawl-food.jpg");
+  background-image: url("../../img/bawl-food.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
 
 .chicken {
-  background-image: url("../../img/chicken.jpg");
+  background-image: url("../../img/chicken.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -74,14 +74,14 @@
 }
 
 .chawing {
-  background-image: url("../../img/chweing-toy.jpg");
+  background-image: url("../../img/chawing-toy.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
 
 .stick {
-  background-image: url("../../img/stick.jpg");
+  background-image: url("../../img/stick.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
