@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import AlbumNote from "../../Components/AlbumNote/AlbumNote.Component";
 import EditAlbumNoteWindow from "../../Components/EditAlbumNoteWindow/EditAlbumNoteWindow.Component";
 import "./MyAlbum.css";
+import ErrorMessage from "../../Components/ErrorMessage/ErrorMessage.Component";
 
 const API = `https://605b251627f0050017c0645f.mockapi.io/users/`;
 
 function Album() {
   const [album, setAlbum] = useState({});
   const [data, setData] = useState({});
+  const [errorMessage, setErrorMessage] = useState("hidden");
 
   useEffect(() => {
     const collectStartData = async () => {
@@ -21,6 +23,7 @@ function Album() {
         setAlbum(data.album);
       } catch (e) {
         console.log(e);
+        setErrorMessage("visible");
       }
     };
 
@@ -96,6 +99,10 @@ function Album() {
   let key = 0;
   return (
     <div className="Album">
+      <ErrorMessage
+        visibility={errorMessage}
+        onClickExit={() => setErrorMessage("hidden")}
+      />
       <EditAlbumNoteWindow
         input={
           <textarea

@@ -7,6 +7,7 @@ import ItemSpend from "../../Components/ItemSpend/ItemSpend.Component";
 import axios from "axios";
 import "./Home.css";
 import CreatePugPic from "../../Components/CreatePugPic/CreatePugPic.Component";
+import ErrorMessage from "../../Components/ErrorMessage/ErrorMessage.Component";
 
 //imgs
 import bagImg from "../../img/bag.png";
@@ -45,6 +46,7 @@ const Home = () => {
     },
   });
   const [albumNotes, setAlbumNotes] = useState({});
+  const [errorMessage, setErrorMessage] = useState("hidden");
 
   // * UPDATE API functions
   const postCurrentUser = async () => {
@@ -72,6 +74,7 @@ const Home = () => {
       localStorage.setItem("id", `${data.id}`);
     } catch (e) {
       console.log(e);
+      setErrorMessage("visible");
     }
   };
 
@@ -86,6 +89,7 @@ const Home = () => {
       setAlbumNotes(data.album);
     } catch (e) {
       console.log(e);
+      setErrorMessage("visible");
     }
   };
 
@@ -208,6 +212,10 @@ const Home = () => {
 
   return (
     <div className="Home">
+      <ErrorMessage
+        visibility={errorMessage}
+        onClickExit={() => setErrorMessage("hidden")}
+      />
       <button className="home-btn" onClick={clickOnTakePicture}>
         <i className="fas fa-camera-retro fa-2x"></i>
       </button>

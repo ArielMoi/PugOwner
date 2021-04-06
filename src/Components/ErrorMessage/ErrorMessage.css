@@ -1,0 +1,25 @@
+.error-window {
+  margin: 5%;
+  display: flex;
+  flex-direction: column;
+  height: max-content;
+  width: 400px;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  position: fixed;
+  top: 40%;
+  left: 45%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.527);
+  padding: 20px;
+}
+
+#x {
+  border: transparent;
+  margin: 2px;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
