@@ -4,96 +4,64 @@ import { useState, useEffect } from "react";
 const GameBoard = () => {
   const [boardObj, setBoardObj] = useState({});
   let key = 0;
+  const [board, setBoard] = useState([]);
 
   // initalizing board
   useEffect(() => {
-    const tempBoardObj = {};
-
     const createBaseWorld = () => {
+      let tempArray = [];
       for (let row = 0; row < 15; row++) {
+        let currentRow = [];
         for (let column = 0; column < 25; column++) {
-          if (row === 14) {
-            tempBoardObj[`${row}.${column}`] = (
-              <div className="land" key={key++} />
-            );
-          } else if (row === 6 && column === 1) {
-            tempBoardObj[`${row}.${column}`] = (
-              <div className="pug" key={key++} />
-            );
-          } else {
-            tempBoardObj[`${row}.${column}`] = (
-              <div key={key++}>{/* {row}.{column} */}</div>
-            );
+          currentRow.push(<div key={key++} />);
+          if (column === 24) {
+            tempArray.push(currentRow);
           }
         }
       }
-      setBoardObj(tempBoardObj);
+      setBoard(tempArray);
     };
     createBaseWorld();
   }, []);
 
-  const obstacleCreator = (obstacle) => {
-    const tempBoardObj = {};
-    function obstacleMaker(
-      material,
-      rowStart = 1,
-      rowEnd = 20,
-      columnStart = 1,
-      columnEnd = 25
-    ) {
-      let key = 300;
-      Object.entries(boardObj).forEach(([position, element]) => {
-        const [row, column] = position.split(".");
-        if (
-          Number(columnStart) <= column &&
-          column <= Number(columnEnd) &&
-          Number(rowStart) <= row &&
-          row <= Number(rowEnd)
-        ) {
-          tempBoardObj[`${row}.${column}`] = (
-            <div className={material} key={key++} />
-          );
-        } else {
-          tempBoardObj[`${row}.${column}`] = element;
-        }
-      });
-    }
+  const obstacleCreator = (positions, material) => {
+    // pop first el and push in new one.
+    let tempBoard = board.map((e, i) => {
+      if (positions.includes(i)) {
+        console.log();
+        e.shift();
+        e.push(<div className={material} />);
+        return e;
+      } else {
+        return e;
+      }
+    });
+    setBoard(tempBoard);
+  };
 
-    switch (obstacle) {
-      case "bush":
-        console.log("bush");
-        obstacleMaker("grass", 0, 3, 22, 24);
-        break;
-      case "rock":
-        console.log("rock");
-        obstacleMaker("rock", 10, 13, 22, 24);
-        break;
-      case "wall":
-        console.log("wall");
-        obstacleMaker("rock", 7, 13, 23, 24);
-        break;
-      default:
-        break;
-    }
+  const moveWorld = () => {
+    let tempBoard = board.map((e, i) => {
+      e.shift();
+      e.push(<div />);
+      return e;
+    });
 
-    setBoardObj(tempBoardObj);
+    setBoard(tempBoard);
   };
 
   const startGame = () => {
-    let obstaclesArray = ["bush", "rock", "wall"];
+    obstacleCreator([0, 1, 2], "rock");
 
-    obstacleCreator(
-      obstaclesArray[Math.floor(Math.random() * obstaclesArray.length)]
-    );
-
-    // setTimeout(() => {
-    //   obstacleCreator(
-    //     obstaclesArray[Math.floor(Math.random() * obstaclesArray.length)]
-    //   );
-    // }, 1000);
-
-    setTimeout(startMovingObstacles, 2500);
+    setInterval(moveWorld, 1000);
   };
+
+  // create event listener for window - recognize mouse location
+
+  useEffect(() => {
+    window.addEventListener('mouseover', (event)=>{
+      if (event.target.classList) console.log(event.target.classList);
+    })
+  },[])
 
   // func to move obstacles
   const startMovingObstacles = () => {
@@ -152,7 +120,12 @@ const GameBoard = () => {
     <div>
       <button onClick={startGame}>start</button>
       <div className="game-board">
-        {Object.values(boardObj).map((div) => div)}
+        {/* {Object.values(boardObj).map((div) => div)} */}
+        {board.map((row) =>
+          row.map((element) => {
+            return element;
+          })
+        )}
       </div>
     </div>
   );
