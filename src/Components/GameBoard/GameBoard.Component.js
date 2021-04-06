@@ -1,5 +1,15 @@
 import "./GameBoard.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import Item from "../Item/Item.Component";
+
+import appleImg from "../../img/apple.png";
+import bananaImg from "../../img/banana.png";
+import bawlImg from "../../img/bawl-food.png";
+import chickenImg from "../../img/chicken.png";
+import ballToy from "../../img/ball.png";
+import ballsToy from "../../img/balls.png";
+import chewingToy from "../../img/chawing-toy.png";
+import stickToy from "../../img/stick.png";
 
 const GameBoard = () => {
   let key = 0;
@@ -45,7 +55,6 @@ const GameBoard = () => {
       e.push(<div />);
       return e;
     });
-
     setBoard(tempBoard);
   };
 
@@ -82,7 +91,7 @@ const GameBoard = () => {
     let tempBoard = board.map((e, i) => {
       if (position === i) {
         e.shift();
-        e.push(<div className={item} />);
+        e.push(<div className={item} key={item} />);
         return e;
       } else {
         e.shift();
@@ -93,60 +102,146 @@ const GameBoard = () => {
     setBoard(tempBoard);
   };
 
+  let first = true;
   const startGame = () => {
-    setInterval(() => {
-      obstacleCreator(
-        ...arrayOfObstacles[Math.floor(Math.random() * arrayOfObstacles.length)]
-      );
-    }, 1250);
+    if (first) {
+      const obstaclesInterval = setInterval(() => {
+        obstacleCreator(
+          ...arrayOfObstacles[
+            Math.floor(Math.random() * arrayOfObstacles.length)
+          ]
+        );
+      }, 1250);
 
-    setInterval(() => {
-      shopItemsGenerator(
-        Math.floor(Math.random() * 14),
-        arrayOfItems[Math.floor(Math.random() * arrayOfItems.length)]
-      );
-    }, 3750);
+      const itemsInterval = setInterval(() => {
+        shopItemsGenerator(
+          Math.floor(Math.random() * 14),
+          arrayOfItems[Math.floor(Math.random() * arrayOfItems.length)]
+        );
+      }, 3750);
 
-    setInterval(moveWorld, 500);
+      const moveWorldInterval = setInterval(moveWorld, 500);
+
+      first = false; // *
+    }
+    gameScreen.current.classList.remove("stop-game");
   };
 
   // create event listener for window - recognize mouse location
+  const gameScreen = useRef(null);
+  const [gameBag, setGameBag] = useState({
+    food: {
+      apple: [appleImg, 0],
+      banana: [bananaImg, 0],
+      bawl: [bawlImg, 0],
+      chicken: [chickenImg, 0],
+    },
+    toys: {
+      ball: [ballToy, 0],
+      balls: [ballsToy, 0],
+      chawing: [chewingToy, 0],
+      stick: [stickToy, 0],
+    },
+  });
+
+  const stopGame = () => {
+    gameScreen.current.classList.add("stop-game");
+    window.removeEventListener("mouseover", meetObstacle);
+  };
+
+  const meetObstacle = (event) => {
+    if (
+      event.target.classList.length > 0 &&
+      !event.target.classList.contains("Nav")
+    ) {
+      if (arrayOfItems.includes(event.target.classList[0])) {
+        // if is bag item
+        const bag = { ...gameBag };
+        
+
+        if (bag.food[event.target.classList[0]]) {
+          bag.food[event.target.classList[0]] = [
+            bag.food[event.target.classList[0]][0],
+            bag.food[event.target.classList[0]][1] + 1,
+          ];
+        }
+        if (bag.toys[event.target.classList[0]]) {
+          bag.toys[event.target.classList[0]] = [
+            bag.toys[event.target.classList[0]][0],
+            bag.toys[event.target.classList[0]][1] + 1,
+          ];
+        }
+
+        setGameBag(bag);
+        cleanItemInBoard(event.target.classList[0]);
+        // event.target.classList.remove(event.target.classList[0]); // doesn't work cause moving world keep updating -> disappea for only a sec
+      } else if (// if obstacle
+        ["rock", "grass", "land"].includes(event.target.classList[0])
+      ) {
+        
+        stopGame();
+        resetBag();
+      }
+    }
+  };
+
   useEffect(() => {
-    const meetObstacle = (event) => {
-      if (
-        event.target.classList.length > 0 &&
-        !event.target.classList.contains("Nav")
-      ) {
-        console.log(event.target.classList);
-        // evoke func of player fail
-      }
-    };
-
-    const meetItem = (event) => {
-      if (
-        event.target.classList.length > 0 &&
-        !event.target.classList.contains("Nav")
-      ) {
-        console.log(event.target.classList);
-        // evoke func of player collecting
-      }
-    };
-
-    // const arrayOfObstaclesClasses = ["land", "rock", "grass"];
     window.addEventListener("mouseover", meetObstacle);
-    window.addEventListener("mouseover", meetItem);
 
-    return () => {
-      window.removeEventListener("mouseover", meetObstacle);
-      window.removeEventListener("mouseover", meetItem);
-    };
+    return () => window.removeEventListener("mouseover", meetObstacle);
   }, []);
 
+  const cleanItemInBoard = (item) => {
+    let boardWithoutItem = board.map((row) =>
+      row.map((element) => {
+        if (item == element.key) {
+          console.log('match');
+          return <div />;
+        }else {
+          return element;
+        }
+      })
+    );
+
+    console.log(boardWithoutItem);
+    setBoard(boardWithoutItem);
+  };
+
+  const resetBag = () => {
+    // when player encounter obstacle
+    setGameBag({
+      food: {
+        apple: [appleImg, 0],
+        banana: [bananaImg, 0],
+        bawl: [bawlImg, 0],
+        chicken: [chickenImg, 0],
+      },
+      toys: {
+        ball: [ballToy, 0],
+        balls: [ballsToy, 0],
+        chawing: [chewingToy, 0],
+        stick: [stickToy, 0],
+      },
+    });
+  };
+
   return (
-    <div>
-      <button onClick={startGame}>start</button>
-      <div className="game-board">
-        {/* {Object.values(boardObj).map((div) => div)} */}
+    <div id="game">
+      <div className="header">
+        <button onClick={startGame}>Start Game</button>
+        <div className="game-bag">
+          {Object.values(gameBag.food).map(([img, amount]) => (
+            <Item imgUrl={img} amount={amount} />
+          ))}
+          {Object.values(gameBag.toys).map(([img, amount]) => (
+            <Item imgUrl={img} amount={amount} />
+          ))}
+        </div>
+        <button style={{ float: "right" }} onClick={stopGame}>
+          Stop Game
+        </button>
+      </div>
+      <div ref={gameScreen} className="game-board">
         {board.map((row) =>
           row.map((element) => {
             return element;

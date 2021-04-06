@@ -10,6 +10,44 @@
   height: 30px;
 }
 
+#game {
+  background: rgba(128, 128, 128, 0.678);
+  height: 95vh;
+}
+
+#game button {
+  margin: 10px;
+  padding: 5px;
+  background: transparent;
+  color: wheat;
+  border: 1px solid wheat;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+#game button:hover {
+  color: black;
+  border: 1px solid black;
+}
+
+.game-bag {
+  display: flex;
+}
+
+.game-bag > div {
+  width: max-content;
+  height: max-content;
+}
+
+.game-bag img {
+  width: 50px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-around;
+}
+
 .land {
   background-image: url("../../img/grass.png");
   background-size: cover;
@@ -85,4 +123,26 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.stop-game {
+  background: skyblue;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.stop-game::before {
+  content: "LOSE!";
+  color: red;
+  font-weight: bold;
+  position: absolute;
+  color: #fff;
+  font-size: larger;
+  top: 50%;
+  left: 48%;
+}
+
+.stop-game > div {
+  background: black;
 }

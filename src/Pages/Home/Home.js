@@ -21,7 +21,7 @@ import stickToy from "../../img/stick.png";
 
 const API = `https://605b251627f0050017c0645f.mockapi.io/users/`;
 
-const Home = (props) => {
+const Home = () => {
   // * initializing states
   const [bagVisibility, setBagVisibility] = useState("hidden");
   const [currentItem, setCurrentItem] = useState("");
@@ -111,13 +111,17 @@ const Home = (props) => {
   const clickOnItem = async (userItem) => {
     let bagTemp = { ...userBag };
 
-    // updates user bag - iterate over food and over toys
-    Object.entries(bagTemp.food).forEach(([name, item]) => {
-      if (name === userItem.target.alt) {
-        hunger <= 95 && setHunger(hunger + 5);
-        if (item[1] !== 0) bagTemp[name] = [item[0], --item[1]];
-      }
-    });
+    // if ( // check if item exists
+    //   bagTemp.food[userItem.target.alt][1] ||
+    //   bagTemp.toys[userItem.target.alt][1]
+    // )
+      // updates user bag - iterate over food and over toys
+      Object.entries(bagTemp.food).forEach(([name, item]) => {
+        if (name === userItem.target.alt) {
+          hunger <= 95 && setHunger(hunger + 5);
+          if (item[1] !== 0) bagTemp[name] = [item[0], --item[1]];
+        }
+      });
 
     Object.entries(bagTemp.toys).forEach(([name, item]) => {
       // iterate over current bag to update the right item
