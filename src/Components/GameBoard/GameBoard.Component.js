@@ -28,11 +28,12 @@ const GameBoard = () => {
     // pop first el and push in new one.
     let tempBoard = board.map((e, i) => {
       if (positions.includes(i)) {
-        console.log();
         e.shift();
         e.push(<div className={material} />);
         return e;
       } else {
+        e.shift();
+        e.push(<div />);
         return e;
       }
     });
@@ -40,7 +41,7 @@ const GameBoard = () => {
   };
 
   const moveWorld = () => {
-    let tempBoard = board.map((e, i) => {
+    let tempBoard = board.map((e) => {
       e.shift();
       e.push(<div />);
       return e;
@@ -49,19 +50,83 @@ const GameBoard = () => {
     setBoard(tempBoard);
   };
 
-  const startGame = () => {
-    obstacleCreator([0, 1, 2], "rock");
+  const arrayOfObstacles = [
+    [[0, 1, 2], "rock"],
+    [[0, 1, 2, 3, 4], "rock"],
+    [[0, 1, 2], "grass"],
+    [[0, 1, 2, 3, 4], "grass"],
+    [[0, 1, 2], "land"],
+    [[0, 1, 2, 3, 4], "land"],
+    [[14, 13, 12], "rock"],
+    [[14, 13, 12, 11, 10], "rock"],
+    [[14, 13, 12], "grass"],
+    [[14, 13, 12, 11, 10], "grass"],
+    [[14, 13, 12], "land"],
+    [[14, 13, 12, 11, 10], "land"],
+    [[5, 6, 7, 8], "rock"],
+    [[6, 7, 8, 9], "grass"],
+    [[3, 4, 5, 6], "land"],
+  ];
 
-    setInterval(moveWorld, 1000);
+  const arrayOfItems = [
+    "apple",
+    "banana",
+    "bawl",
+    "chicken",
+    "ball",
+    "balls",
+    "chawing",
+    "stick",
+  ];
+
+  const shopItemsGenerator = (position, item) => {
+    let tempBoard = board.map((e, i) => {
+      if (position === i) {
+        e.shift();
+        e.push(<div className={item} />);
+        return e;
+      } else {
+        e.shift();
+        e.push(<div />);
+        return e;
+      }
+    });
+    setBoard(tempBoard);
   };
 
-  // create event listener for window - recognize mouse location
+  const startGame = () => {
 
+    setInterval(() => {
+      obstacleCreator(
+        ...arrayOfObstacles[Math.floor(Math.random() * arrayOfObstacles.length)]
+      );
+    }, 1250);
+
+    setInterval(() => {
+      shopItemsGenerator(
+        Math.floor(Math.random() * 14),
+        arrayOfItems[Math.floor(Math.random() * arrayOfItems.length)]
+      );
+    }, 1750);
+
+    setInterval(moveWorld, 500);
+  };
+
+  
+  // create event listener for window - recognize mouse location
   useEffect(() => {
-    window.addEventListener('mouseover', (event)=>{
-      if (event.target.classList) console.log(event.target.classList);
-    })
-  },[])
+    // const arrayOfObstaclesClasses = ["land", "rock", "grass"];
+    window.addEventListener("mouseover", (event) => {
+      // recognizing mouse (player) fail and contact obstacles
+      if (
+        event.target.classList.length > 0 &&
+        !event.target.classList.contains("Nav")
+      ) {
+        console.log(event.target.classList);
+        // evoke func of player fail
+      }
+    });
+  }, []);
 
   // func to move obstacles
   const startMovingObstacles = () => {

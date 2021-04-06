@@ -31,8 +31,57 @@
   background-position: center;
 }
 
-.pug {
-  background-image: url("../../img/jetpack-pug.png");
+.apple {
+  background-image: url("../../img/apple.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.banana {
+  background-image: url("../../img/banana.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.bawl {
+  background-image: url("../../img/bawl-food.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.chicken {
+  background-image: url("../../img/chicken.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.ball {
+  background-image: url("../../img/ball.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.balls {
+  background-image: url("../../img/balls.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.chawing {
+  background-image: url("../../img/chweing-toy.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.stick {
+  background-image: url("../../img/stick.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
