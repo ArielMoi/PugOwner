@@ -84,21 +84,20 @@ const Home = () => {
       setHappy(data.happy);
       setUserBag(data.bag);
       setAlbumNotes(data.album);
-
-      // localStorage.setItem("data", JSON.stringify(data));
     } catch (e) {
       console.log(e);
     }
   };
 
-  async function updateUserInApi() {
-    await axios.put(`${API}${localStorage.getItem("id")}`, {
+  const updateUserInApi = () => {
+    console.log(albumNotes, hunger, happy, userBag);
+    axios.put(`${API}${localStorage.getItem("id")}`, {
       hunger: hunger,
       happy: happy,
       bag: userBag,
       album: albumNotes,
     });
-  }
+  };
 
   // * CLICK ON function
   const clickOnBag = () => {
@@ -110,18 +109,12 @@ const Home = () => {
 
   const clickOnItem = async (userItem) => {
     let bagTemp = { ...userBag };
-
-    // if ( // check if item exists
-    //   bagTemp.food[userItem.target.alt][1] ||
-    //   bagTemp.toys[userItem.target.alt][1]
-    // )
-      // updates user bag - iterate over food and over toys
-      Object.entries(bagTemp.food).forEach(([name, item]) => {
-        if (name === userItem.target.alt) {
-          hunger <= 95 && setHunger(hunger + 5);
-          if (item[1] !== 0) bagTemp[name] = [item[0], --item[1]];
-        }
-      });
+    Object.entries(bagTemp.food).forEach(([name, item]) => {
+      if (name === userItem.target.alt) {
+        hunger <= 95 && setHunger(hunger + 5);
+        if (item[1] !== 0) bagTemp[name] = [item[0], --item[1]];
+      }
+    });
 
     Object.entries(bagTemp.toys).forEach(([name, item]) => {
       // iterate over current bag to update the right item
@@ -152,67 +145,101 @@ const Home = () => {
       console.log("found user");
       collectStartData();
     }
-    return () => updateUserInApi();
   }, []);
 
-  // useEffect( // each health change
-  //   () => {
-  //     setTimeout(async () => {
-  //       await setHunger(hunger >= 5 && hunger - 5);
-  //       await setHappy(happy >= 5 && happy - 5);
-  //       updateUserInApi();
-  //     }, 7000); // 900000 -> 15min
-  //   }, []
-  // );
+  // useEffect(() => {
+  //   const hungerTimeout = setTimeout(() => {
+  //     setHunger(hunger >= 5 && hunger - 5);
+  //   }, 50000);
+  //   return () => clearTimeout(hungerTimeout);
+  // }, [hunger]);
 
-  useEffect(() => {
-    const hungerTimeout = setTimeout(() => {
-      setHunger(hunger >= 5 && hunger - 5);
-    }, 50000);
-    return () => clearTimeout(hungerTimeout);
-  }, [hunger]);
-
-  useEffect(() => {
-    const happyTimeout = setTimeout(() => {
-      setHappy(happy >= 5 && happy - 5);
-    }, 50000);
-    return () => clearTimeout(happyTimeout);
-  }, [happy]);
-
+  // useEffect(() => {
+  //   const happyTimeout = setTimeout(() => {
+  //     setHappy(happy >= 5 && happy - 5);
+  //   }, 50000);
+  //   return () => clearTimeout(happyTimeout);
+  // }, [happy]);
 
   // * TAKE PIC OPTION
-  const [picVisibility, setPicVisibility] = useState("hidden");
+  const [takePicNoteVisibility, setTakePicNoteVisibility] = useState("hidden");
 
   const clickOnTakePicture = () => {
     // open and close Pic maker
-    picVisibility === "hidden"
-      ? setPicVisibility("visible")
-      : setPicVisibility("hidden");
+    takePicNoteVisibility === "hidden"
+      ? setTakePicNoteVisibility("visible")
+      : setTakePicNoteVisibility("hidden");
   };
 
   const userInput = useRef(null);
   let pugIndex = Math.floor(Math.random() * 11); // randomize pug picture
 
-  const clickSubmit = async () => {
+  const clickSubmit = () => {
+    localStorage.setItem(
+      "album",
+      JSON.stringify({
+        ...albumNotes,
+        [userInput.current.value]: [pugIndex],
+      })
+    );
     setAlbumNotes({ ...albumNotes, [userInput.current.value]: [pugIndex] }); // update in state of album notes
-    localStorage.setItem("album", JSON.stringify(albumNotes));
-    updateUserInApi();
-    // try {
-    //   await axios.put(`${API}${localStorage.getItem("id")}`, {
-    //     // add to data in api
-    //     album: { ...albumNotes, [userInput.current.value]: [pugIndex] },
-    //     hunger,
-    //     happy,
-    //     bag: userBag,
-    //   });
-    // } catch (e) {
-    //   console.log(e);
-    // }
+
+    try {
+      console.log(albumNotes, hunger, happy, userBag);
+      axios.put(`${API}${localStorage.getItem("id")}`, {
+        // add to data in api
+        album: { ...albumNotes, [userInput.current.value]: [pugIndex] },
+        hunger: hunger,
+        happy: happy,
+        bag: userBag,
+      });
+    } catch (e) {
+      console.log(e);
+    }
 
     userInput.current.value = ""; // reset text area input
     clickOnTakePicture(); // to close pic window
     pugIndex = Math.floor(Math.random() * 11); // initializing pug index
   };
+
+  // --------------------------------------------------
+
+  const [lastTime, setLastTime] = useState([]);
+  const [newTime, setNewTime] = useState([
+    new Date().getHours(),
+    new Date().getMinutes(),
+  ]);
+
+  useEffect(() => {
+    let now = new Date();
+    setLastTime([now.getHours(), now.getMinutes()]);
+  }, []);
+
+  const calculateTime = () => {
+    // if (lastTime[1] !== newTime[1]) {
+    setTimeout(() => {
+      let now = new Date();
+      if (newTime[1] != now.getMinutes()) {
+        console.log(newTime[1]);
+        console.log(now.getMinutes());
+        setNewTime([now.getHours(), now.getMinutes()]);
+        console.log(now.getMinutes());
+      }
+    }, 10000);
+    // }
+  };
+
+  useEffect(() => {
+    setHunger(hunger >= 5 && hunger - 5);
+    setHappy(happy >= 5 && happy - 5);
+    updateUserInApi();
+  }, [newTime]);
+
+  useEffect(() => {
+    calculateTime();
+  });
+
+  // --------------------------------
 
   return (
     <div className="Home">
@@ -220,7 +247,7 @@ const Home = () => {
         <i className="fas fa-camera-retro fa-2x"></i>
       </button>
       <CreatePugPic
-        visibility={picVisibility}
+        visibility={takePicNoteVisibility}
         onClickExit={clickOnTakePicture}
         input={<textarea ref={userInput} rows="4" cols="50" />}
         onClickSubmit={clickSubmit}

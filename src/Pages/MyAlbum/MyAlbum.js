@@ -12,30 +12,31 @@ function Album() {
   const [data, setData] = useState({});
 
   useEffect(() => {
-    console.log(localStorage.getItem("album"));
-    // collecting initializing data for the album
-    const collectAlbum = async () => {
-      let { data } = await axios.get(`${API}${localStorage.getItem("id")}`);
-      setAlbum(data.album);
-      localStorage.setItem("album", JSON.stringify(data.album));
-      localStorage.setItem("data", JSON.stringify(data));
-    };
-
-    setAlbum(JSON.parse(localStorage.getItem("album")));
-    collectAlbum();
-    // adding local storage for quicker reloading user experience
-    if (!localStorage.getItem("album")) {
+    const collectStartData = async () => {
       try {
-        collectAlbum();
-        setAlbum(JSON.parse(localStorage.getItem("album")));
+        let id = localStorage.getItem("id");
+        let { data } = await axios.get(`${API}${id}`);
+
+        setData(data);
+        setAlbum(data.album);
       } catch (e) {
         console.log(e);
       }
-    } else {
-      setAlbum(JSON.parse(localStorage.getItem("album")));
-    }
+    };
 
-    return () => updateAlbumInApi();
+    // collecting initializing data for the album
+    const collectAlbum = async () => {
+      try {
+        let { data } = await axios.get(`${API}${localStorage.getItem("id")}`);
+        setAlbum(data.album);
+        setData(data);
+      } catch (e) {
+        console.log(e);
+        collectStartData();
+      }
+    };
+
+    collectAlbum();
   }, []);
 
   // update album in api func
@@ -46,12 +47,11 @@ function Album() {
         hunger: data.hunger,
         happy: data.happy,
         bag: data.bag,
-      })
+      });
     } catch (e) {
       console.log(e);
     }
   };
-
 
   // delete func
   const deleteFromAlbum = (mes) => {
@@ -68,7 +68,7 @@ function Album() {
 
   const editFromAlbum = async (note, pugIndex) => {
     setCurrentNote(note);
-    setBeforeEditNote(note); // keeping refrence to the unchanged not
+    setBeforeEditNote(note); // keeping reference to the unchanged not
     setEditVisibility("visible");
     setCurrentPugEdited(pugIndex);
   };
@@ -81,7 +81,6 @@ function Album() {
     // iterating over the obj to keep the order
     let updatedAlbum = {};
     Object.entries(album).forEach(([note, pugIndex]) => {
-      console.log(pugIndex);
       note === beforeEditNote
         ? (updatedAlbum[currentNote] = pugIndex)
         : (updatedAlbum[note] = pugIndex);
@@ -90,9 +89,9 @@ function Album() {
     setEditVisibility("hidden");
   };
 
-  // useEffect(() => {
-  //   localStorage.setItem("album", JSON.stringify(album));
-  // }, [album]);
+  useEffect(() => {
+    updateAlbumInApi();
+  }, [album]);
 
   let key = 0;
   return (

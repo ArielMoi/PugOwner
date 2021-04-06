@@ -1,7 +1,6 @@
 .Album {
   text-align: center;
-  height: 92.5vh;
-  /* max-height: 95vh; */
+  min-height: 92.5vh;
 }
 
 .album-grid {
