@@ -157,7 +157,6 @@ const GameBoard = () => {
       if (arrayOfItems.includes(event.target.classList[0])) {
         // if is bag item
         const bag = { ...gameBag };
-        
 
         if (bag.food[event.target.classList[0]]) {
           bag.food[event.target.classList[0]] = [
@@ -175,10 +174,10 @@ const GameBoard = () => {
         setGameBag(bag);
         cleanItemInBoard(event.target.classList[0]);
         // event.target.classList.remove(event.target.classList[0]); // doesn't work cause moving world keep updating -> disappea for only a sec
-      } else if (// if obstacle
+      } else if (
+        // if obstacle
         ["rock", "grass", "land"].includes(event.target.classList[0])
       ) {
-        
         stopGame();
         resetBag();
       }
@@ -187,24 +186,24 @@ const GameBoard = () => {
 
   useEffect(() => {
     window.addEventListener("mouseover", meetObstacle);
-
     return () => window.removeEventListener("mouseover", meetObstacle);
   }, []);
 
-  const cleanItemInBoard = (item) => {
+  const cleanItemInBoard = (item) => { // ! dont work.
     let boardWithoutItem = board.map((row) =>
       row.map((element) => {
         if (item == element.key) {
-          console.log('match');
+          console.log("match");
           return <div />;
-        }else {
+        } else {
+          console.log('not');
           return element;
         }
       })
     );
 
     console.log(boardWithoutItem);
-    setBoard(boardWithoutItem);
+    // setBoard(boardWithoutItem);
   };
 
   const resetBag = () => {
@@ -243,9 +242,7 @@ const GameBoard = () => {
       </div>
       <div ref={gameScreen} className="game-board">
         {board.map((row) =>
-          row.map((element) => {
-            return element;
-          })
+          row.map((element) => element)
         )}
       </div>
     </div>

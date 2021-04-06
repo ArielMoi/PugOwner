@@ -93,8 +93,8 @@ const Home = () => {
 
   async function updateUserInApi() {
     await axios.put(`${API}${localStorage.getItem("id")}`, {
-      hunger,
-      happy,
+      hunger: hunger,
+      happy: happy,
       bag: userBag,
       album: albumNotes,
     });
@@ -196,20 +196,21 @@ const Home = () => {
   const clickSubmit = async () => {
     setAlbumNotes({ ...albumNotes, [userInput.current.value]: [pugIndex] }); // update in state of album notes
     localStorage.setItem("album", JSON.stringify(albumNotes));
-    try {
-      await axios.put(`${API}${localStorage.getItem("id")}`, {
-        // add to data in api
-        album: { ...albumNotes, [userInput.current.value]: [pugIndex] },
-        hunger,
-        happy,
-        bag: userBag,
-      });
-    } catch (e) {
-      console.log(e);
-    }
+    updateUserInApi();
+    // try {
+    //   await axios.put(`${API}${localStorage.getItem("id")}`, {
+    //     // add to data in api
+    //     album: { ...albumNotes, [userInput.current.value]: [pugIndex] },
+    //     hunger,
+    //     happy,
+    //     bag: userBag,
+    //   });
+    // } catch (e) {
+    //   console.log(e);
+    // }
 
     userInput.current.value = ""; // reset text area input
-    await clickOnTakePicture(); // to close pic window
+    clickOnTakePicture(); // to close pic window
     pugIndex = Math.floor(Math.random() * 11); // initializing pug index
   };
 

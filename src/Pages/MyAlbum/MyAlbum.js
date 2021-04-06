@@ -12,6 +12,7 @@ function Album() {
   const [data, setData] = useState({});
 
   useEffect(() => {
+    console.log(localStorage.getItem("album"));
     // collecting initializing data for the album
     const collectAlbum = async () => {
       let { data } = await axios.get(`${API}${localStorage.getItem("id")}`);
@@ -20,11 +21,13 @@ function Album() {
       localStorage.setItem("data", JSON.stringify(data));
     };
 
+    setAlbum(JSON.parse(localStorage.getItem("album")));
+    collectAlbum();
     // adding local storage for quicker reloading user experience
     if (!localStorage.getItem("album")) {
       try {
         collectAlbum();
-        setData(JSON.parse(localStorage.getItem("data")))
+        setAlbum(JSON.parse(localStorage.getItem("album")));
       } catch (e) {
         console.log(e);
       }
@@ -87,9 +90,9 @@ function Album() {
     setEditVisibility("hidden");
   };
 
-  useEffect(() => {
-    localStorage.setItem("album", JSON.stringify(album));
-  }, [album]);
+  // useEffect(() => {
+  //   localStorage.setItem("album", JSON.stringify(album));
+  // }, [album]);
 
   let key = 0;
   return (

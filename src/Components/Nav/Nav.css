@@ -3,6 +3,13 @@
   justify-content: space-evenly;
   color: #fff;
   background: black;
+  height: 7.5vh;
+}
+
+.Nav img {
+  width: 50px;
+  position: fixed;
+  left: 10px;
 }
 
 .Nav ol li {
