@@ -215,7 +215,11 @@ const GameBoard = () => {
         }
 
         setGameBag(bag);
+        // event.target.classList.remove(event.target.classList[0]);
         cleanItemInBoard(event.target.classList[0]);
+        setTimeout(() => {
+          event.target.classList.remove(event.target.classList[0]);
+        }, 1000);
         // event.target.classList.remove(event.target.classList[0]); // doesn't work cause moving world keep updating -> disappea for only a sec
       } else if (
         // if obstacle
@@ -244,9 +248,6 @@ const GameBoard = () => {
   }; // disappear for only a sec
 
   const resetBag = () => {
-    // when player encounter obstacle
-    console.log(data.bag);
-    // setGameBag(data.bag);
     setGameBag({
       food: {
         apple: [appleImg, 0],
@@ -266,7 +267,7 @@ const GameBoard = () => {
   const collectMaterial = async () => {
     // await collectStartData();
     // await unitingBags();
-    console.log('data');
+    console.log("data");
     console.log(data);
     await updateInApi();
     resetBag();
@@ -291,6 +292,8 @@ const GameBoard = () => {
   };
 
   const updateInApi = async () => {
+    console.log(data.bag.toys);
+    console.log(gameBag.toys);
     try {
       await axios.put(`${API}${localStorage.getItem("id")}`, {
         album: data.album,
@@ -312,7 +315,7 @@ const GameBoard = () => {
             balls: [ballsToy, data.bag.toys.balls[1] + gameBag.toys.balls[1]],
             chawing: [
               chewingToy,
-              data.bag.toys.chewing[1] + gameBag.toys.chawing[1],
+              data.bag.toys.chawing[1] + gameBag.toys.chawing[1],
             ],
             stick: [stickToy, data.bag.toys.stick[1] + gameBag.toys.stick[1]],
           },
