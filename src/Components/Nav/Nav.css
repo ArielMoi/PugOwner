@@ -25,3 +25,9 @@
 .Nav a:hover {
   color: wheat;
 }
+
+@media (max-width: 860px) {
+  .Nav {
+    height: 12vh;
+  }
+}

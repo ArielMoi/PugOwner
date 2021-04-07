@@ -136,6 +136,7 @@ const Home = () => {
 
     await setUserBag(bagTemp); // update state
     updateUserInApi();
+    updateHealth();
 
     // show message of item used
     setCurrentItem(userItem.target.src);
@@ -191,8 +192,16 @@ const Home = () => {
   }, []);
 
   // ---------------------------------------------------------------------------
+  const updateHealth = () => {
+    const health = JSON.parse(localStorage.getItem("health"));
+    health.hunger = hunger;
+    health.happy = happy;
+    localStorage.setItem("health", JSON.stringify(health));
+  };
+
   // func to down health and update it.
   const downingHealth = () => {
+    debugger;
     const health = JSON.parse(localStorage.getItem("health"));
     const last = health.time;
     const now = [new Date().getHours(), new Date().getMinutes()];
@@ -200,26 +209,25 @@ const Home = () => {
     let differenceByMinutes;
     if (now[0] > last[0]) {
       const differenceByHours = (now[0] - last[0]) * 60;
-      console.log("h dif - " + differenceByHours);
 
       if (now[1] > last[1]) {
-        differenceByMinutes = now[0] - last[0];
+        differenceByMinutes = now[1] - last[1];
       } else {
-        differenceByMinutes = now[0];
+        differenceByMinutes = now[1];
       }
 
       numOfDowns = (differenceByHours + differenceByMinutes) / 5;
     } else {
       if (now[1] > last[1]) {
-        differenceByMinutes = now[0] - last[0];
+        differenceByMinutes = now[1] - last[1];
       } else {
-        differenceByMinutes = now[0];
+        differenceByMinutes = now[1];
       }
 
       numOfDowns = differenceByMinutes / 5;
     }
 
-    if (differenceByMinutes > 5) {
+    if (differenceByMinutes >= 5) {
       console.log(health);
       health.time = now;
       health.hunger -= 5 * numOfDowns;
@@ -234,10 +242,11 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (localStorage.getItem('health')){
+    if (localStorage.getItem("health")) {
       setHunger(JSON.parse(localStorage.getItem("health")).hunger);
       setHappy(JSON.parse(localStorage.getItem("health")).happy);
     }
+    downingHealth();
     setInterval(() => {
       downingHealth();
     }, 50000);

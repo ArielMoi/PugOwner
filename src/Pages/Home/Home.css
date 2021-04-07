@@ -6,9 +6,37 @@
 .home-btn {
   background: transparent;
   padding: 5px;
-  /* float: right;0/0 */
   position: absolute;
   top: 45px;
   right: 5px;
   margin: 10px;
+}
+
+@media (max-width: 860px) {
+  .Home {
+    height: 88vh;
+    padding-top: 20px;
+  }
+}
+
+/* force player to move to landscape */
+@media only screen and (orientation: portrait) {
+  .Home {
+    background: black;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .Home::before {
+    content: "Please rotate your phone to landscape to play the game";
+    position: absolute;
+    color: #fff;
+    font-weight: 900;
+    top: 49%;
+    right: 2%;
+  }
+
+  .Home > * {
+    visibility: hidden;
+  }
 }

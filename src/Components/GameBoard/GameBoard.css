@@ -146,3 +146,19 @@
 .stop-game > div {
   background: black;
 }
+
+@media (max-width: 860px) {
+  .game-board > div {
+    height: 20px;
+  }
+  .game-board {
+    margin: 0;
+  }
+  .game-bag img {
+    width: 40px;
+  }
+  #game {
+    background: rgba(128, 128, 128, 0.678);
+    height: 88vh;
+  }
+}

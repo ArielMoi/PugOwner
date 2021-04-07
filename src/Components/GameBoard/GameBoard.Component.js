@@ -179,6 +179,8 @@ const GameBoard = () => {
           moveWorld(board);
           round = 0;
           break;
+        default:
+          break;
       }
     }, 500);
     window.addEventListener("mouseover", meetObstacle);
@@ -231,7 +233,7 @@ const GameBoard = () => {
   const cleanItemInBoard = (item) => {
     let boardWithoutItem = board.map((row) =>
       row.map((element) => {
-        if (item == element.key) {
+        if (item === element.key) {
           console.log("match");
           return <div />;
         } else {
@@ -360,7 +362,7 @@ const GameBoard = () => {
         </button>
         <button
           onClick={restartGame}
-          style={{ display: startGameVisibility == "hidden" ? "" : "none" }}
+          style={{ display: startGameVisibility === "hidden" ? "" : "none" }}
         >
           Return To Game
         </button>
@@ -380,7 +382,7 @@ const GameBoard = () => {
       <div
         ref={gameScreen}
         className="game-board"
-        style={{ cursor: `url(${pugJetpack}), auto;` }}
+        style={{ cursor: `url(${pugJetpack}), auto` }}
       >
         {board.map((row) => row.map((element) => element))}
       </div>

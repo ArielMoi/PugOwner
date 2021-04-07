@@ -11,7 +11,7 @@
 
 .Album h1 {
   padding: 20px;
-  color: wheat;
+  color: #850118;
   grid: 1, span 3;
 }
 
@@ -23,4 +23,12 @@
 
 .Album button:hover {
   color: wheat;
+}
+
+@media (max-width: 860px) {
+  .Album {
+    text-align: center;
+    min-height: 88vh;
+    font-family: "Rajdhani", sans-serif;
+  }
 }

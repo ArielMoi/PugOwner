@@ -30,3 +30,13 @@
 .btns {
   float: right;
 }
+
+@media (max-width: 860px) {
+  .album-window img {
+    width: 150px;
+  }
+  .album-window {
+    padding: 5px;
+    margin: 5px;
+  }
+}

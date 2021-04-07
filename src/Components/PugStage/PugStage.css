@@ -5,3 +5,9 @@
 .PugStage img {
   width: 600px;
 }
+
+@media (max-width: 860px) {
+  .PugStage img {
+    width: 42%;
+  }
+}
