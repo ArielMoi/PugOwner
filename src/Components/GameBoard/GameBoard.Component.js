@@ -204,23 +204,20 @@ const GameBoard = () => {
         if (bag.food[event.target.classList[0]]) {
           bag.food[event.target.classList[0]] = [
             bag.food[event.target.classList[0]][0],
-            bag.food[event.target.classList[0]][1] + 1,
+            ++bag.food[event.target.classList[0]][1],
           ];
         }
         if (bag.toys[event.target.classList[0]]) {
           bag.toys[event.target.classList[0]] = [
             bag.toys[event.target.classList[0]][0],
-            bag.toys[event.target.classList[0]][1] + 1,
+            ++bag.toys[event.target.classList[0]][1],
           ];
         }
 
         setGameBag(bag);
-        // event.target.classList.remove(event.target.classList[0]);
+        // event.target.classList.add(event.target.classList[0]);
         cleanItemInBoard(event.target.classList[0]);
-        setTimeout(() => {
-          event.target.classList.remove(event.target.classList[0]);
-        }, 1000);
-        // event.target.classList.remove(event.target.classList[0]); // doesn't work cause moving world keep updating -> disappea for only a sec
+        // arrayOfItems.includes(event.target.classList[0]) && event.target.classList.remove(event.target.classList[0]); // doesn't work cause moving world keep updating -> disappea for only a sec
       } else if (
         // if obstacle
         ["rock", "grass", "land"].includes(event.target.classList[0])
