@@ -47,8 +47,6 @@ function Album() {
     try {
       await axios.put(`${API}${localStorage.getItem("id")}`, {
         album: { ...album },
-        hunger: data.hunger,
-        happy: data.happy,
         bag: data.bag,
       });
     } catch (e) {

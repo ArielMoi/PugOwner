@@ -234,7 +234,10 @@ const Home = () => {
   };
 
   useEffect(() => {
-    downingHealth();
+    if (localStorage.getItem('health')){
+      setHunger(JSON.parse(localStorage.getItem("health")).hunger);
+      setHappy(JSON.parse(localStorage.getItem("health")).happy);
+    }
     setInterval(() => {
       downingHealth();
     }, 50000);

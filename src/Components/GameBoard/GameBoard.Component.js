@@ -18,49 +18,23 @@ const API = `https://605b251627f0050017c0645f.mockapi.io/users/`;
 const GameBoard = () => {
   let key = 0;
   const [board, setBoard] = useState([]);
-
-  // initalizing board
-  useEffect(() => {
-    const createBaseWorld = () => {
-      let tempArray = [];
-      for (let row = 0; row < 15; row++) {
-        let currentRow = [];
-        for (let column = 0; column < 25; column++) {
-          currentRow.push(<div key={key++} />);
-          if (column === 24) {
-            tempArray.push(currentRow);
-          }
-        }
-      }
-      setBoard(tempArray);
-    };
-    createBaseWorld();
-  }, []);
-
-  const obstacleCreator = (positions, material) => {
-    // pop first el and push in new one.
-    let tempBoard = board.map((e, i) => {
-      if (positions.includes(i)) {
-        e.shift();
-        e.push(<div className={material} />);
-        return e;
-      } else {
-        e.shift();
-        e.push(<div />);
-        return e;
-      }
-    });
-    setBoard(tempBoard);
-  };
-
-  function moveWorld(board) {
-    let tempBoard = board.map((e) => {
-      e.shift();
-      e.push(<div />);
-      return e;
-    });
-    setBoard(tempBoard);
-  }
+  const [startGameVisibility, setStartGameVisibility] = useState("visible");
+  const gameScreen = useRef(null);
+  const [gameBag, setGameBag] = useState({
+    food: {
+      apple: [appleImg, 0],
+      banana: [bananaImg, 0],
+      bawl: [bawlImg, 0],
+      chicken: [chickenImg, 0],
+    },
+    toys: {
+      ball: [ballToy, 0],
+      balls: [ballsToy, 0],
+      chawing: [chewingToy, 0],
+      stick: [stickToy, 0],
+    },
+  });
+  const [data, setData] = useState({});
 
   const arrayOfObstacles = [
     [[0, 1, 2], "rock"],
@@ -91,6 +65,33 @@ const GameBoard = () => {
     "stick",
   ];
 
+  // * FUNCTIONS
+
+  const obstacleCreator = (positions, material) => {
+    // pop first el and push in new one.
+    let tempBoard = board.map((e, i) => {
+      if (positions.includes(i)) {
+        e.shift();
+        e.push(<div className={material} />);
+        return e;
+      } else {
+        e.shift();
+        e.push(<div />);
+        return e;
+      }
+    });
+    setBoard(tempBoard);
+  };
+
+  function moveWorld(board) {
+    let tempBoard = board.map((e) => {
+      e.shift();
+      e.push(<div />);
+      return e;
+    });
+    setBoard(tempBoard);
+  }
+
   const shopItemsGenerator = (position, item) => {
     let tempBoard = board.map((e, i) => {
       if (position === i) {
@@ -106,8 +107,6 @@ const GameBoard = () => {
     setBoard(tempBoard);
   };
 
-  const [startGameVisibility, setStartGameVisibility] = useState("visible");
-  let first = true;
   const startGame = () => {
     let round = 1;
     setInterval(() => {
@@ -188,23 +187,6 @@ const GameBoard = () => {
     setStartGameVisibility("hidden");
   };
 
-  // create event listener for window - recognize mouse location
-  const gameScreen = useRef(null);
-  const [gameBag, setGameBag] = useState({
-    food: {
-      apple: [appleImg, 0],
-      banana: [bananaImg, 0],
-      bawl: [bawlImg, 0],
-      chicken: [chickenImg, 0],
-    },
-    toys: {
-      ball: [ballToy, 0],
-      balls: [ballsToy, 0],
-      chawing: [chewingToy, 0],
-      stick: [stickToy, 0],
-    },
-  });
-
   const stopGame = () => {
     gameScreen.current.classList.add("stop-game");
     window.removeEventListener("mouseover", meetObstacle);
@@ -245,15 +227,9 @@ const GameBoard = () => {
     }
   };
 
-  useEffect(() => {
-    window.addEventListener("mouseover", meetObstacle);
-    return () => window.removeEventListener("mouseover", meetObstacle);
-  }, []);
-
   const cleanItemInBoard = (item) => {
     let boardWithoutItem = board.map((row) =>
       row.map((element) => {
-        console.log(element);
         if (item == element.key) {
           console.log("match");
           return <div />;
@@ -264,12 +240,13 @@ const GameBoard = () => {
       })
     );
 
-    console.log(boardWithoutItem);
     setBoard(boardWithoutItem);
-  }; // disappeared for only a sec
+  }; // disappear for only a sec
 
   const resetBag = () => {
     // when player encounter obstacle
+    console.log(data.bag);
+    // setGameBag(data.bag);
     setGameBag({
       food: {
         apple: [appleImg, 0],
@@ -286,8 +263,22 @@ const GameBoard = () => {
     });
   };
 
-  // -----------------------------------
-  const [data, setData] = useState({});
+  const collectMaterial = async () => {
+    // await collectStartData();
+    // await unitingBags();
+    console.log('data');
+    console.log(data);
+    await updateInApi();
+    resetBag();
+  };
+
+  const restartGame = () => {
+    window.addEventListener("mouseover", meetObstacle);
+    gameScreen.current.classList.remove("stop-game");
+  };
+
+  // * API COLLECTING DATA FUNCTIONS
+
   const collectStartData = async () => {
     try {
       let id = localStorage.getItem("id");
@@ -299,45 +290,67 @@ const GameBoard = () => {
     }
   };
 
-  const unitingBags = () => {
-    setGameBag({
-      food: {
-        apple: [appleImg, data.bag.food.apple + gameBag.food.apple],
-        banana: [bananaImg, data.bag.food.banana + gameBag.food.banana],
-        bawl: [bawlImg, data.bag.food.bawl + gameBag.food.bawl],
-        chicken: [chickenImg, data.bag.food.chicken + gameBag.food.chicken],
-      },
-      toys: {
-        ball: [ballToy, data.bag.toys.ball + gameBag.toys.ball],
-        balls: [ballsToy, data.bag.toys.balls + gameBag.toys.balls],
-        chawing: [chewingToy, data.bag.toys.chawing + gameBag.toys.chawing],
-        stick: [stickToy, data.bag.toys.stick + gameBag.toys.stick],
-      },
-    });
-  };
-
   const updateInApi = async () => {
-    await unitingBags();
     try {
       await axios.put(`${API}${localStorage.getItem("id")}`, {
         album: data.album,
-        bag: gameBag,
+        bag: {
+          food: {
+            apple: [appleImg, data.bag.food.apple[1] + gameBag.food.apple[1]],
+            banana: [
+              bananaImg,
+              data.bag.food.banana[1] + gameBag.food.banana[1],
+            ],
+            bawl: [bawlImg, data.bag.food.bawl[1] + gameBag.food.bawl[1]],
+            chicken: [
+              chickenImg,
+              data.bag.food.chicken[1] + gameBag.food.chicken[1],
+            ],
+          },
+          toys: {
+            ball: [ballToy, data.bag.toys.ball[1] + gameBag.toys.ball[1]],
+            balls: [ballsToy, data.bag.toys.balls[1] + gameBag.toys.balls[1]],
+            chawing: [
+              chewingToy,
+              data.bag.toys.chewing[1] + gameBag.toys.chawing[1],
+            ],
+            stick: [stickToy, data.bag.toys.stick[1] + gameBag.toys.stick[1]],
+          },
+        },
       });
     } catch (e) {
       console.log(e);
     }
   };
 
-  const collectMaterial = async () => {
-    await collectStartData();
-    await updateInApi();
-    resetBag();
-  };
+  // * RENDERING FUNCTIONS
+  // initalizing board
+  useEffect(() => {
+    const createBaseWorld = () => {
+      let tempArray = [];
+      for (let row = 0; row < 15; row++) {
+        let currentRow = [];
+        for (let column = 0; column < 25; column++) {
+          currentRow.push(<div key={key++} />);
+          if (column === 24) {
+            tempArray.push(currentRow);
+          }
+        }
+      }
+      setBoard(tempArray);
+    };
+    createBaseWorld();
+  }, []);
 
-  const restartGame = () => {
+  // initializing bag
+
+  useEffect(() => {
+    // starting event listener for the game
     window.addEventListener("mouseover", meetObstacle);
-    gameScreen.current.classList.remove("stop-game");
-  };
+    collectStartData();
+  }, []);
+
+  // -----------------------------------
 
   return (
     <div id="game">
