@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/PugOwner/static/css/main.2298b15f.chunk.css",
+    "main.js": "/PugOwner/static/js/main.1b38f562.chunk.js",
+    "main.js.map": "/PugOwner/static/js/main.1b38f562.chunk.js.map",
+    "runtime-main.js": "/PugOwner/static/js/runtime-main.035b52a9.js",
+    "runtime-main.js.map": "/PugOwner/static/js/runtime-main.035b52a9.js.map",
+    "static/js/2.09aa15dd.chunk.js": "/PugOwner/static/js/2.09aa15dd.chunk.js",
+    "static/js/2.09aa15dd.chunk.js.map": "/PugOwner/static/js/2.09aa15dd.chunk.js.map",
+    "index.html": "/PugOwner/index.html",
+    "static/css/main.2298b15f.chunk.css.map": "/PugOwner/static/css/main.2298b15f.chunk.css.map",
+    "static/js/2.09aa15dd.chunk.js.LICENSE.txt": "/PugOwner/static/js/2.09aa15dd.chunk.js.LICENSE.txt",
+    "static/media/GameBoard.css": "/PugOwner/static/media/tree-leaves.eed8347d.png",
+    "static/media/bag.9c91cc71.png": "/PugOwner/static/media/bag.9c91cc71.png",
+    "static/media/App.css": "/PugOwner/static/media/bg-living-room.0cda357d.jpg",
+    "static/media/cool-pug.7d6c141e.png": "/PugOwner/static/media/cool-pug.7d6c141e.png",
+    "static/media/jetpack-pug.5bccb3c1.jpg": "/PugOwner/static/media/jetpack-pug.5bccb3c1.jpg",
+    "static/media/logo.22d9d3be.png": "/PugOwner/static/media/logo.22d9d3be.png",
+    "static/media/pug-default.1ba833c5.png": "/PugOwner/static/media/pug-default.1ba833c5.png",
+    "static/media/pug-waiting-food.d41487d1.png": "/PugOwner/static/media/pug-waiting-food.d41487d1.png",
+    "static/media/pug-waiting-trip.6f4b262c.jpg": "/PugOwner/static/media/pug-waiting-trip.6f4b262c.jpg",
+    "static/media/pug-waving.7c959c04.jpg": "/PugOwner/static/media/pug-waving.7c959c04.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.035b52a9.js",
+    "static/js/2.09aa15dd.chunk.js",
+    "static/css/main.2298b15f.chunk.css",
+    "static/js/main.1b38f562.chunk.js"
+  ]
+}
