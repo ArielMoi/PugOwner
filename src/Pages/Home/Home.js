@@ -47,13 +47,14 @@ const Home = () => {
   });
   const [albumNotes, setAlbumNotes] = useState({});
   const [errorMessage, setErrorMessage] = useState("hidden");
+  const [takePicNoteVisibility, setTakePicNoteVisibility] = useState("hidden");
+  const userInput = useRef(null);
+  let pugIndex = Math.floor(Math.random() * 11); // randomize pug picture
 
   // * UPDATE API functions
   const postCurrentUser = async () => {
     try {
       let { data } = await axios.post(API, {
-        hunger: 100,
-        happy: 100,
         bag: {
           food: {
             apple: [appleImg, 1],
@@ -76,6 +77,16 @@ const Home = () => {
       console.log(e);
       setErrorMessage("visible");
     }
+
+    const now = new Date();
+    localStorage.setItem(
+      "health",
+      JSON.stringify({
+        hunger: 100,
+        happy: 100,
+        time: [now.getHours(), now.getMinutes()],
+      })
+    );
   };
 
   const collectStartData = async () => {
@@ -83,8 +94,6 @@ const Home = () => {
       let id = localStorage.getItem("id");
       let { data } = await axios.get(`${API}${id}`);
 
-      setHunger(data.hunger);
-      setHappy(data.happy);
       setUserBag(data.bag);
       setAlbumNotes(data.album);
     } catch (e) {
@@ -94,16 +103,13 @@ const Home = () => {
   };
 
   const updateUserInApi = () => {
-    console.log(albumNotes, hunger, happy, userBag);
     axios.put(`${API}${localStorage.getItem("id")}`, {
-      hunger: hunger,
-      happy: happy,
       bag: userBag,
       album: albumNotes,
     });
   };
 
-  // * CLICK ON function
+  // * CLICK ON functions
   const clickOnBag = () => {
     // open and close bag
     bagVisibility === "hidden"
@@ -139,44 +145,12 @@ const Home = () => {
     }, 2000);
   };
 
-  //* rendering methods
-  useEffect(() => {
-    // only on first run
-    if (!localStorage.getItem("id")) {
-      console.log("not found user");
-      postCurrentUser();
-    } else {
-      console.log("found user");
-      collectStartData();
-    }
-  }, []);
-
-  // useEffect(() => {
-  //   const hungerTimeout = setTimeout(() => {
-  //     setHunger(hunger >= 5 && hunger - 5);
-  //   }, 50000);
-  //   return () => clearTimeout(hungerTimeout);
-  // }, [hunger]);
-
-  // useEffect(() => {
-  //   const happyTimeout = setTimeout(() => {
-  //     setHappy(happy >= 5 && happy - 5);
-  //   }, 50000);
-  //   return () => clearTimeout(happyTimeout);
-  // }, [happy]);
-
-  // * TAKE PIC OPTION
-  const [takePicNoteVisibility, setTakePicNoteVisibility] = useState("hidden");
-
   const clickOnTakePicture = () => {
     // open and close Pic maker
     takePicNoteVisibility === "hidden"
       ? setTakePicNoteVisibility("visible")
       : setTakePicNoteVisibility("hidden");
   };
-
-  const userInput = useRef(null);
-  let pugIndex = Math.floor(Math.random() * 11); // randomize pug picture
 
   const clickSubmit = () => {
     localStorage.setItem(
@@ -189,7 +163,6 @@ const Home = () => {
     setAlbumNotes({ ...albumNotes, [userInput.current.value]: [pugIndex] }); // update in state of album notes
 
     try {
-      console.log(albumNotes, hunger, happy, userBag);
       axios.put(`${API}${localStorage.getItem("id")}`, {
         // add to data in api
         album: { ...albumNotes, [userInput.current.value]: [pugIndex] },
@@ -206,9 +179,66 @@ const Home = () => {
     pugIndex = Math.floor(Math.random() * 11); // initializing pug index
   };
 
-  // --------------------------------------------------
+  //* rendering functions
+  useEffect(() => {
+    if (!localStorage.getItem("id")) {
+      console.log("not found user");
+      postCurrentUser();
+    } else {
+      console.log("found user");
+      collectStartData();
+    }
+  }, []);
 
-  // --------------------------------
+  // ---------------------------------------------------------------------------
+  // func to down health and update it.
+  const downingHealth = () => {
+    const health = JSON.parse(localStorage.getItem("health"));
+    const last = health.time;
+    const now = [new Date().getHours(), new Date().getMinutes()];
+    let numOfDowns;
+    let differenceByMinutes;
+    if (now[0] > last[0]) {
+      const differenceByHours = (now[0] - last[0]) * 60;
+      console.log("h dif - " + differenceByHours);
+
+      if (now[1] > last[1]) {
+        differenceByMinutes = now[0] - last[0];
+      } else {
+        differenceByMinutes = now[0];
+      }
+
+      numOfDowns = (differenceByHours + differenceByMinutes) / 5;
+    } else {
+      if (now[1] > last[1]) {
+        differenceByMinutes = now[0] - last[0];
+      } else {
+        differenceByMinutes = now[0];
+      }
+
+      numOfDowns = differenceByMinutes / 5;
+    }
+
+    if (differenceByMinutes > 5) {
+      console.log(health);
+      health.time = now;
+      health.hunger -= 5 * numOfDowns;
+      health.happy -= 5 * numOfDowns;
+      health.hunger = health.hunger < 0 ? 0 : health.hunger;
+      health.happy = health.happy < 0 ? 0 : health.happy;
+
+      setHappy(health.happy);
+      setHunger(health.hunger);
+      localStorage.setItem("health", JSON.stringify(health));
+    }
+  };
+
+  useEffect(() => {
+    downingHealth();
+    setInterval(() => {
+      downingHealth();
+    }, 50000);
+  }, []);
 
   return (
     <div className="Home">

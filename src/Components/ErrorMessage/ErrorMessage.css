@@ -12,14 +12,20 @@
   left: 45%;
   margin-right: -50%;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.527);
+  background: rgba(0, 0, 0, 0.774);
   padding: 20px;
+  color: rgb(129, 17, 17);
 }
 
-#x {
-  border: transparent;
-  margin: 2px;
-  position: absolute;
-  right: 5px;
-  top: 5px;
+.error-window P {
+  color: #fff;
+}
+
+.error-window button {
+  background: transparent;
+  cursor: pointer;
+}
+
+.error-window button:hover {
+  color: wheat;
 }

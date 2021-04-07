@@ -11,6 +11,8 @@
   background-attachment: fixed;
 
   background-size: cover;
+
+  font-family: "Indie Flower", cursive;
 }
 
 button:focus {

@@ -11,6 +11,7 @@ import ballToy from "../../img/ball.png";
 import ballsToy from "../../img/balls.png";
 import chewingToy from "../../img/chawing-toy.png";
 import stickToy from "../../img/stick.png";
+import pugJetpack from "../../img/jetpack-pug.png";
 
 const API = `https://605b251627f0050017c0645f.mockapi.io/users/`;
 
@@ -52,14 +53,14 @@ const GameBoard = () => {
     setBoard(tempBoard);
   };
 
-  const moveWorld = () => {
+  function moveWorld(board) {
     let tempBoard = board.map((e) => {
       e.shift();
       e.push(<div />);
       return e;
     });
     setBoard(tempBoard);
-  };
+  }
 
   const arrayOfObstacles = [
     [[0, 1, 2], "rock"],
@@ -105,31 +106,86 @@ const GameBoard = () => {
     setBoard(tempBoard);
   };
 
+  const [startGameVisibility, setStartGameVisibility] = useState("visible");
   let first = true;
   const startGame = () => {
-    if (first) {
-      const obstaclesInterval = setInterval(() => {
-        obstacleCreator(
-          ...arrayOfObstacles[
-            Math.floor(Math.random() * arrayOfObstacles.length)
-          ]
-        );
-      }, 1250);
-
-      const itemsInterval = setInterval(() => {
-        shopItemsGenerator(
-          Math.floor(Math.random() * 14),
-          arrayOfItems[Math.floor(Math.random() * arrayOfItems.length)]
-        );
-      }, 3750);
-
-      const moveWorldInterval = setInterval(moveWorld, 500);
-
-      first = false; // *
-    }
-
+    let round = 1;
+    setInterval(() => {
+      switch (round) {
+        case 0:
+          obstacleCreator(
+            ...arrayOfObstacles[
+              Math.floor(Math.random() * arrayOfObstacles.length)
+            ]
+          );
+          round++;
+          break;
+        case 1:
+        case 2:
+        case 3:
+          moveWorld(board);
+          round++;
+          break;
+        case 4:
+          obstacleCreator(
+            ...arrayOfObstacles[
+              Math.floor(Math.random() * arrayOfObstacles.length)
+            ]
+          );
+          round++;
+          break;
+        case 5:
+        case 6:
+        case 7:
+          moveWorld(board);
+          round++;
+          break;
+        case 8:
+          obstacleCreator(
+            ...arrayOfObstacles[
+              Math.floor(Math.random() * arrayOfObstacles.length)
+            ]
+          );
+          round++;
+          break;
+        case 9:
+        case 10:
+        case 11:
+        case 12:
+          moveWorld(board);
+          round++;
+          break;
+        case 13:
+          obstacleCreator(
+            ...arrayOfObstacles[
+              Math.floor(Math.random() * arrayOfObstacles.length)
+            ]
+          );
+          round++;
+          break;
+        case 14:
+        case 15:
+        case 16:
+          moveWorld(board);
+          round++;
+          break;
+        case 17:
+          shopItemsGenerator(
+            Math.floor(Math.random() * 14),
+            arrayOfItems[Math.floor(Math.random() * arrayOfItems.length)]
+          );
+          round++;
+          break;
+        case 18:
+          moveWorld(board);
+          round = 0;
+          break;
+      }
+    }, 500);
     window.addEventListener("mouseover", meetObstacle);
+
     gameScreen.current.classList.remove("stop-game");
+    setStartGameVisibility("hidden");
   };
 
   // create event listener for window - recognize mouse location
@@ -177,7 +233,7 @@ const GameBoard = () => {
         }
 
         setGameBag(bag);
-        // cleanItemInBoard(event.target.classList[0]);
+        cleanItemInBoard(event.target.classList[0]);
         // event.target.classList.remove(event.target.classList[0]); // doesn't work cause moving world keep updating -> disappea for only a sec
       } else if (
         // if obstacle
@@ -195,9 +251,9 @@ const GameBoard = () => {
   }, []);
 
   const cleanItemInBoard = (item) => {
-    // ! dont work.
     let boardWithoutItem = board.map((row) =>
       row.map((element) => {
+        console.log(element);
         if (item == element.key) {
           console.log("match");
           return <div />;
@@ -209,8 +265,8 @@ const GameBoard = () => {
     );
 
     console.log(boardWithoutItem);
-    // setBoard(boardWithoutItem);
-  };
+    setBoard(boardWithoutItem);
+  }; // disappeared for only a sec
 
   const resetBag = () => {
     // when player encounter obstacle
@@ -243,12 +299,28 @@ const GameBoard = () => {
     }
   };
 
-  const updateAlbumInApi = async () => {
+  const unitingBags = () => {
+    setGameBag({
+      food: {
+        apple: [appleImg, data.bag.food.apple + gameBag.food.apple],
+        banana: [bananaImg, data.bag.food.banana + gameBag.food.banana],
+        bawl: [bawlImg, data.bag.food.bawl + gameBag.food.bawl],
+        chicken: [chickenImg, data.bag.food.chicken + gameBag.food.chicken],
+      },
+      toys: {
+        ball: [ballToy, data.bag.toys.ball + gameBag.toys.ball],
+        balls: [ballsToy, data.bag.toys.balls + gameBag.toys.balls],
+        chawing: [chewingToy, data.bag.toys.chawing + gameBag.toys.chawing],
+        stick: [stickToy, data.bag.toys.stick + gameBag.toys.stick],
+      },
+    });
+  };
+
+  const updateInApi = async () => {
+    await unitingBags();
     try {
       await axios.put(`${API}${localStorage.getItem("id")}`, {
         album: data.album,
-        hunger: data.hunger,
-        happy: data.happy,
         bag: gameBag,
       });
     } catch (e) {
@@ -258,14 +330,27 @@ const GameBoard = () => {
 
   const collectMaterial = async () => {
     await collectStartData();
-    await updateAlbumInApi();
+    await updateInApi();
     resetBag();
+  };
+
+  const restartGame = () => {
+    window.addEventListener("mouseover", meetObstacle);
+    gameScreen.current.classList.remove("stop-game");
   };
 
   return (
     <div id="game">
       <div className="header">
-        <button onClick={startGame}>Start Game</button>
+        <button onClick={startGame} style={{ visibility: startGameVisibility }}>
+          Start Game
+        </button>
+        <button
+          onClick={restartGame}
+          style={{ display: startGameVisibility == "hidden" ? "" : "none" }}
+        >
+          Return To Game
+        </button>
         <button onClick={collectMaterial}>collect material</button>
         <div className="game-bag">
           {Object.values(gameBag.food).map(([img, amount]) => (
@@ -279,7 +364,11 @@ const GameBoard = () => {
           Stop Game
         </button>
       </div>
-      <div ref={gameScreen} className="game-board">
+      <div
+        ref={gameScreen}
+        className="game-board"
+        style={{ cursor: `url(${pugJetpack}), auto;` }}
+      >
         {board.map((row) => row.map((element) => element))}
       </div>
     </div>

@@ -1,6 +1,7 @@
 .Album {
   text-align: center;
   min-height: 92.5vh;
+  font-family: "Rajdhani", sans-serif;
 }
 
 .album-grid {
