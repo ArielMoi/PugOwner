@@ -11,7 +11,7 @@ import ballToy from "../../img/ball.png";
 import ballsToy from "../../img/balls.png";
 import chewingToy from "../../img/chawing-toy.png";
 import stickToy from "../../img/stick.png";
-import pugJetpack from "../../img/jetpack-pug.png";
+import pugJetpack from "../../img/game-cursor.png";
 
 const API = `https://605b251627f0050017c0645f.mockapi.io/users/`;
 
@@ -190,7 +190,8 @@ const GameBoard = () => {
   };
 
   const stopGame = () => {
-    gameScreen.current.classList.add("stop-game");
+    console.log(gameScreen.current);
+    gameScreen.current && gameScreen.current.classList.add("stop-game");
     window.removeEventListener("mouseover", meetObstacle);
   };
 
@@ -209,7 +210,7 @@ const GameBoard = () => {
             ++bag.food[event.target.classList[0]][1],
           ];
         }
-        if (bag.toys[event.target.classList[0]]) {
+        else if (bag.toys[event.target.classList[0]]) {
           bag.toys[event.target.classList[0]] = [
             bag.toys[event.target.classList[0]][0],
             ++bag.toys[event.target.classList[0]][1],
@@ -291,8 +292,24 @@ const GameBoard = () => {
   };
 
   const updateInApi = async () => {
-    console.log(data.bag.toys);
-    console.log(gameBag.toys);
+    console.log(data.bag);
+    console.log(gameBag);
+    console.log(data.bag.food.apple[1]);
+    console.log(data.bag.food.banana[1]);
+    console.log(data.bag.food.bawl[1]);
+    console.log(data.bag.food.chicken[1]);
+    console.log(gameBag.food.apple[1]);
+    console.log(gameBag.food.banana[1]);
+    console.log(gameBag.food.bawl[1]);
+    console.log(gameBag.food.chicken[1]);
+    console.log(data.bag.toys.ball[1]);
+    console.log(data.bag.toys.balls[1]);
+    console.log(data.bag.toys.chewing[1]);
+    console.log(data.bag.toys.stick[1]);
+    console.log(gameBag.toys.ball[1]);
+    console.log(gameBag.toys.balls[1]);
+    console.log(gameBag.toys.chawing[1]);
+    console.log(gameBag.toys.stick[1]);
     try {
       await axios.put(`${API}${localStorage.getItem("id")}`, {
         album: data.album,
@@ -312,9 +329,9 @@ const GameBoard = () => {
           toys: {
             ball: [ballToy, data.bag.toys.ball[1] + gameBag.toys.ball[1]],
             balls: [ballsToy, data.bag.toys.balls[1] + gameBag.toys.balls[1]],
-            chawing: [
+            chewing: [
               chewingToy,
-              data.bag.toys.chawing[1] + gameBag.toys.chawing[1],
+              data.bag.toys.chewing[1] + gameBag.toys.chawing[1],
             ],
             stick: [stickToy, data.bag.toys.stick[1] + gameBag.toys.stick[1]],
           },
@@ -382,7 +399,7 @@ const GameBoard = () => {
       <div
         ref={gameScreen}
         className="game-board"
-        style={{ cursor: `url(${pugJetpack}), auto` }}
+        style={{ cursor: `url("${pugJetpack}"), auto` }}
       >
         {board.map((row) => row.map((element) => element))}
       </div>

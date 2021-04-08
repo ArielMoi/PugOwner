@@ -167,8 +167,6 @@ const Home = () => {
       axios.put(`${API}${localStorage.getItem("id")}`, {
         // add to data in api
         album: { ...albumNotes, [userInput.current.value]: [pugIndex] },
-        hunger: hunger,
-        happy: happy,
         bag: userBag,
       });
     } catch (e) {
@@ -201,7 +199,6 @@ const Home = () => {
 
   // func to down health and update it.
   const downingHealth = () => {
-    debugger;
     const health = JSON.parse(localStorage.getItem("health"));
     const last = health.time;
     const now = [new Date().getHours(), new Date().getMinutes()];
@@ -228,7 +225,6 @@ const Home = () => {
     }
 
     if (differenceByMinutes >= 5) {
-      console.log(health);
       health.time = now;
       health.hunger -= 5 * numOfDowns;
       health.happy -= 5 * numOfDowns;
@@ -245,8 +241,8 @@ const Home = () => {
     if (localStorage.getItem("health")) {
       setHunger(JSON.parse(localStorage.getItem("health")).hunger);
       setHappy(JSON.parse(localStorage.getItem("health")).happy);
+      downingHealth();
     }
-    downingHealth();
     setInterval(() => {
       downingHealth();
     }, 50000);

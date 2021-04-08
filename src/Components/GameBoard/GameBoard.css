@@ -3,7 +3,7 @@
   grid-template-columns: repeat(25, 1fr);
   margin: 5px;
   background: skyblue;
-  cursor: url("../../img/jetpack-pug.png"), auto;
+  /* cursor: url("../../../public/static/img/jetpack-pug.png"), auto; */
 }
 
 .game-board > div {
