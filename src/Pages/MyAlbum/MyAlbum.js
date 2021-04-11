@@ -12,7 +12,58 @@ function Album() {
   const [album, setAlbum] = useState({});
   const [data, setData] = useState({});
   const [errorMessage, setErrorMessage] = useState("hidden");
+  const [editVisibility, setEditVisibility] = useState("hidden");
+  const [currentNote, setCurrentNote] = useState("");
+  const [beforeEditNote, setBeforeEditNote] = useState("");
+  const [currentPugEdited, setCurrentPugEdited] = useState(1);
+  let key = 0;
 
+  // * API FUNCNTIONS
+  const updateAlbumInApi = async () => {
+    try {
+      await axios.put(`${API}${localStorage.getItem("id")}`, {
+        album: { ...album },
+        bag: data.bag,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  //* FUNCTIONS
+  // delete func
+  const deleteFromAlbum = (mes) => {
+    let updatedAlbum = { ...album };
+    delete updatedAlbum[mes];
+    setAlbum(updatedAlbum);
+  };
+
+  // edit functions
+  const editFromAlbum = async (note, pugIndex) => {
+    setCurrentNote(note);
+    setBeforeEditNote(note); // keeping reference to the unchanged not
+    setEditVisibility("visible");
+    setCurrentPugEdited(pugIndex);
+  };
+
+  const editTextAlbumNote = (editedNote) => {
+    setCurrentNote(editedNote);
+  };
+
+  const submitEdit = () => {
+    // iterating over the obj to keep the order
+    let updatedAlbum = {};
+    Object.entries(album).forEach(([note, pugIndex]) => {
+      note === beforeEditNote
+        ? (updatedAlbum[currentNote] = pugIndex)
+        : (updatedAlbum[note] = pugIndex);
+    });
+    setAlbum(updatedAlbum);
+    setEditVisibility("hidden");
+  };
+
+
+  // * RENDERING FUNCTIONS
   useEffect(() => {
     const collectStartData = async () => {
       try {
@@ -42,59 +93,10 @@ function Album() {
     collectAlbum();
   }, []);
 
-  // update album in api func
-  const updateAlbumInApi = async () => {
-    try {
-      await axios.put(`${API}${localStorage.getItem("id")}`, {
-        album: { ...album },
-        bag: data.bag,
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  // delete func
-  const deleteFromAlbum = (mes) => {
-    let updatedAlbum = { ...album };
-    delete updatedAlbum[mes];
-    setAlbum(updatedAlbum);
-  };
-
-  // edit functions
-  const [editVisibility, setEditVisibility] = useState("hidden");
-  const [currentNote, setCurrentNote] = useState("");
-  const [beforeEditNote, setBeforeEditNote] = useState("");
-  const [currentPugEdited, setCurrentPugEdited] = useState(1);
-
-  const editFromAlbum = async (note, pugIndex) => {
-    setCurrentNote(note);
-    setBeforeEditNote(note); // keeping reference to the unchanged not
-    setEditVisibility("visible");
-    setCurrentPugEdited(pugIndex);
-  };
-
-  const editTextAlbumNote = (editedNote) => {
-    setCurrentNote(editedNote);
-  };
-
-  const submitEdit = () => {
-    // iterating over the obj to keep the order
-    let updatedAlbum = {};
-    Object.entries(album).forEach(([note, pugIndex]) => {
-      note === beforeEditNote
-        ? (updatedAlbum[currentNote] = pugIndex)
-        : (updatedAlbum[note] = pugIndex);
-    });
-    setAlbum(updatedAlbum);
-    setEditVisibility("hidden");
-  };
-
   useEffect(() => {
     updateAlbumInApi();
   }, [album]);
 
-  let key = 0;
   return (
     <div className="Album">
       <ErrorMessage
