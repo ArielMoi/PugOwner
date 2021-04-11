@@ -190,7 +190,6 @@ const GameBoard = () => {
   };
 
   const stopGame = () => {
-    console.log(gameScreen.current);
     gameScreen.current && gameScreen.current.classList.add("stop-game");
     window.removeEventListener("mouseover", meetObstacle);
   };
@@ -217,9 +216,7 @@ const GameBoard = () => {
         }
 
         setGameBag(bag);
-        // event.target.classList.add(event.target.classList[0]);
         cleanItemInBoard(event.target.classList[0]);
-        // arrayOfItems.includes(event.target.classList[0]) && event.target.classList.remove(event.target.classList[0]); // doesn't work cause moving world keep updating -> disappea for only a sec
       } else if (
         // if obstacle
         ["rock", "grass", "land"].includes(event.target.classList[0])
@@ -244,7 +241,7 @@ const GameBoard = () => {
     );
 
     setBoard(boardWithoutItem);
-  }; // disappear for only a sec
+  }; // ! disappear for only a sec
 
   const resetBag = () => {
     setGameBag({
@@ -263,12 +260,9 @@ const GameBoard = () => {
     });
   };
 
-  const collectMaterial = async () => {
-    // await collectStartData();
-    // await unitingBags();
-    console.log("data");
-    console.log(data);
-    await updateInApi();
+  const collectMaterial = () => {
+    updateInApi();
+    stopGame();
     resetBag();
   };
 
@@ -281,8 +275,7 @@ const GameBoard = () => {
 
   const collectStartData = async () => {
     try {
-      let id = localStorage.getItem("id");
-      let { data } = await axios.get(`${API}${id}`);
+      let { data } = await axios.get(`${API}${localStorage.getItem("id")}`);
 
       setData(data);
     } catch (e) {
@@ -345,8 +338,6 @@ const GameBoard = () => {
   // initializing bag
 
   useEffect(() => {
-    // starting event listener for the game
-    window.addEventListener("mouseover", meetObstacle);
     collectStartData();
   }, []);
 

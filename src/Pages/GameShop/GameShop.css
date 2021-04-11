@@ -133,7 +133,7 @@
 }
 
 .stop-game::before {
-  content: "LOSE!";
+  content: "END!";
   color: red;
   font-weight: bold;
   position: absolute;
