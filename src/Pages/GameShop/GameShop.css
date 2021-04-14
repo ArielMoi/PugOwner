@@ -3,7 +3,6 @@
   grid-template-columns: repeat(25, 1fr);
   margin: 5px;
   background: skyblue;
-  /* cursor: url("../../../public/static/img/jetpack-pug.png"), auto; */
 }
 
 .game-board > div {
@@ -28,24 +27,6 @@
 #game button:hover {
   color: black;
   border: 1px solid black;
-}
-
-.game-bag {
-  display: flex;
-}
-
-.game-bag > div {
-  width: max-content;
-  height: max-content;
-}
-
-.game-bag img {
-  width: 50px;
-}
-
-.header {
-  display: flex;
-  justify-content: space-around;
 }
 
 .land {

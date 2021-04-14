@@ -18,18 +18,6 @@ function Album() {
   const [currentPugEdited, setCurrentPugEdited] = useState(1);
   let key = 0;
 
-  // * API FUNCNTIONS
-  const updateAlbumInApi = async () => {
-    try {
-      await axios.put(`${API}${localStorage.getItem("id")}`, {
-        album: { ...album },
-        bag: data.bag,
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   //* FUNCTIONS
   // delete func
   const deleteFromAlbum = (mes) => {
@@ -62,22 +50,8 @@ function Album() {
     setEditVisibility("hidden");
   };
 
-
   // * RENDERING FUNCTIONS
   useEffect(() => {
-    const collectStartData = async () => {
-      try {
-        let id = localStorage.getItem("id");
-        let { data } = await axios.get(`${API}${id}`);
-
-        setData(data);
-        setAlbum(data.album);
-      } catch (e) {
-        console.log(e);
-        setErrorMessage("visible");
-      }
-    };
-
     // collecting initializing data for the album
     const collectAlbum = async () => {
       try {
@@ -86,16 +60,27 @@ function Album() {
         setData(data);
       } catch (e) {
         console.log(e);
-        collectStartData();
+        setErrorMessage("visible");
       }
     };
 
     collectAlbum();
   }, []);
 
+  // * API FUNCTIONS
   useEffect(() => {
+    const updateAlbumInApi = async () => {
+      try {
+        await axios.put(`${API}${localStorage.getItem("id")}`, {
+          album: { ...album },
+          bag: data.bag,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    };
     updateAlbumInApi();
-  }, [album]);
+  }, [album, data.bag]);
 
   return (
     <div className="Album">

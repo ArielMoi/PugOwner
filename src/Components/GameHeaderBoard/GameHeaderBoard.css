@@ -1,0 +1,17 @@
+.game-bag {
+  display: flex;
+}
+
+.game-bag > div {
+  width: max-content;
+  height: max-content;
+}
+
+.game-bag img {
+  width: 50px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-around;
+}

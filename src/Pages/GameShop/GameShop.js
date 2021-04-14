@@ -2,6 +2,7 @@ import "./GameShop.css";
 import { useState, useEffect, useRef } from "react";
 import Item from "./../../Components/Item/Item.Component";
 import axios from "axios";
+import GameHeaderBoard from '../../Components/GameHeaderBoard/GameHeaderBoard.Component'
 
 import appleImg from "../../img/apple.png";
 import bananaImg from "../../img/banana.png";
@@ -16,7 +17,6 @@ import pugJetpack from "../../img/game-cursor.png";
 const API = `https://605b251627f0050017c0645f.mockapi.io/users/`;
 
 const GameBoard = () => {
-  let key = 0;
   const [board, setBoard] = useState([]);
   const [startGameVisibility, setStartGameVisibility] = useState("visible");
   const gameScreen = useRef(null);
@@ -109,7 +109,7 @@ const GameBoard = () => {
 
   const startGame = () => {
     let round = 1;
-    setInterval(() => {
+    const gameInterval = setInterval(() => {
       switch (round) {
         case 0:
           obstacleCreator(
@@ -319,6 +319,7 @@ const GameBoard = () => {
   // * RENDERING FUNCTIONS
   // initalizing board
   useEffect(() => {
+    let key = 0;
     const createBaseWorld = () => {
       let tempArray = [];
       for (let row = 0; row < 15; row++) {
@@ -345,29 +346,15 @@ const GameBoard = () => {
 
   return (
     <div id="game">
-      <div className="header">
-        <button onClick={startGame} style={{ visibility: startGameVisibility }}>
-          Start Game
-        </button>
-        <button
-          onClick={restartGame}
-          style={{ display: startGameVisibility === "hidden" ? "" : "none" }}
-        >
-          Return To Game
-        </button>
-        <button onClick={collectMaterial}>collect material</button>
-        <div className="game-bag">
-          {Object.values(gameBag.food).map(([img, amount]) => (
-            <Item imgUrl={img} amount={amount} />
-          ))}
-          {Object.values(gameBag.toys).map(([img, amount]) => (
-            <Item imgUrl={img} amount={amount} />
-          ))}
-        </div>
-        <button style={{ float: "right" }} onClick={stopGame}>
-          Stop Game
-        </button>
-      </div>
+      <GameHeaderBoard
+        startGame={startGame}
+        startGameVisibility={startGameVisibility}
+        restartGame={restartGame}
+        startGameVisibility={startGameVisibility}
+        collectMaterial={collectMaterial}
+        gameBag={gameBag}
+        stopGame={stopGame}
+      />
       <div
         ref={gameScreen}
         className="game-board"
