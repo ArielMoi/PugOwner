@@ -5,6 +5,7 @@ import AlbumNote from "../../Components/AlbumNote/AlbumNote.Component";
 import EditAlbumNoteWindow from "../../Components/EditAlbumNoteWindow/EditAlbumNoteWindow.Component";
 import "./MyAlbum.css";
 import ErrorMessage from "../../Components/ErrorMessage/ErrorMessage.Component";
+import { v4 as uuidv4 } from "uuid";
 
 const API = `https://605b251627f0050017c0645f.mockapi.io/users/`;
 
@@ -16,7 +17,6 @@ function Album() {
   const [currentNote, setCurrentNote] = useState("");
   const [beforeEditNote, setBeforeEditNote] = useState("");
   const [currentPugEdited, setCurrentPugEdited] = useState(1);
-  let key = 0;
 
   //* FUNCTIONS
   // delete func
@@ -106,7 +106,7 @@ function Album() {
       <div className="album-grid">
         {Object.entries(album).map(([note, pugIndex]) => (
           <AlbumNote
-            key={key++}
+            key={uuidv4()}
             message={note}
             pugNum={pugIndex}
             deleteClick={() => deleteFromAlbum(note)}

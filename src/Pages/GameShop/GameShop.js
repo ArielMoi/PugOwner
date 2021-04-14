@@ -1,8 +1,8 @@
 import "./GameShop.css";
 import { useState, useEffect, useRef } from "react";
-import Item from "./../../Components/Item/Item.Component";
 import axios from "axios";
-import GameHeaderBoard from '../../Components/GameHeaderBoard/GameHeaderBoard.Component'
+import GameHeaderBoard from "../../Components/GameHeaderBoard/GameHeaderBoard.Component";
+import { v4 as uuidv4 } from "uuid";
 
 import appleImg from "../../img/apple.png";
 import bananaImg from "../../img/banana.png";
@@ -72,11 +72,11 @@ const GameBoard = () => {
     let tempBoard = board.map((e, i) => {
       if (positions.includes(i)) {
         e.shift();
-        e.push(<div className={material} />);
+        e.push(<div key={uuidv4()} className={material} />);
         return e;
       } else {
         e.shift();
-        e.push(<div />);
+        e.push(<div key={uuidv4()} />);
         return e;
       }
     });
@@ -86,7 +86,7 @@ const GameBoard = () => {
   function moveWorld(board) {
     let tempBoard = board.map((e) => {
       e.shift();
-      e.push(<div />);
+      e.push(<div key={uuidv4()} />);
       return e;
     });
     setBoard(tempBoard);
@@ -96,95 +96,103 @@ const GameBoard = () => {
     let tempBoard = board.map((e, i) => {
       if (position === i) {
         e.shift();
-        e.push(<div className={item} key={item} />);
+        e.push(<div className={item} key={`${item},${uuidv4()}`} />);
         return e;
       } else {
         e.shift();
-        e.push(<div />);
+        e.push(<div key={uuidv4()} />);
         return e;
       }
     });
     setBoard(tempBoard);
   };
 
-  const startGame = () => {
+  let gameInterval;
+  const gameIntervalRunner = (reInterval = false) => {
     let round = 1;
-    const gameInterval = setInterval(() => {
-      switch (round) {
-        case 0:
-          obstacleCreator(
-            ...arrayOfObstacles[
-              Math.floor(Math.random() * arrayOfObstacles.length)
-            ]
-          );
-          round++;
-          break;
-        case 1:
-        case 2:
-        case 3:
-          moveWorld(board);
-          round++;
-          break;
-        case 4:
-          obstacleCreator(
-            ...arrayOfObstacles[
-              Math.floor(Math.random() * arrayOfObstacles.length)
-            ]
-          );
-          round++;
-          break;
-        case 5:
-        case 6:
-        case 7:
-          moveWorld(board);
-          round++;
-          break;
-        case 8:
-          obstacleCreator(
-            ...arrayOfObstacles[
-              Math.floor(Math.random() * arrayOfObstacles.length)
-            ]
-          );
-          round++;
-          break;
-        case 9:
-        case 10:
-        case 11:
-        case 12:
-          moveWorld(board);
-          round++;
-          break;
-        case 13:
-          obstacleCreator(
-            ...arrayOfObstacles[
-              Math.floor(Math.random() * arrayOfObstacles.length)
-            ]
-          );
-          round++;
-          break;
-        case 14:
-        case 15:
-        case 16:
-          moveWorld(board);
-          round++;
-          break;
-        case 17:
-          shopItemsGenerator(
-            Math.floor(Math.random() * 14),
-            arrayOfItems[Math.floor(Math.random() * arrayOfItems.length)]
-          );
-          round++;
-          break;
-        case 18:
-          moveWorld(board);
-          round = 0;
-          break;
-        default:
-          break;
-      }
-    }, 500);
-    window.addEventListener("mouseover", meetObstacle);
+    if (reInterval) {
+      clearInterval(gameInterval);
+    } else {
+      gameInterval = setInterval(() => {
+        switch (round) {
+          case 0:
+            obstacleCreator(
+              ...arrayOfObstacles[
+                Math.floor(Math.random() * arrayOfObstacles.length)
+              ]
+            );
+            round++;
+            break;
+          case 1:
+          case 2:
+          case 3:
+            moveWorld(board);
+            round++;
+            break;
+          case 4:
+            obstacleCreator(
+              ...arrayOfObstacles[
+                Math.floor(Math.random() * arrayOfObstacles.length)
+              ]
+            );
+            round++;
+            break;
+          case 5:
+          case 6:
+          case 7:
+            moveWorld(board);
+            round++;
+            break;
+          case 8:
+            obstacleCreator(
+              ...arrayOfObstacles[
+                Math.floor(Math.random() * arrayOfObstacles.length)
+              ]
+            );
+            round++;
+            break;
+          case 9:
+          case 10:
+          case 11:
+          case 12:
+            moveWorld(board);
+            round++;
+            break;
+          case 13:
+            obstacleCreator(
+              ...arrayOfObstacles[
+                Math.floor(Math.random() * arrayOfObstacles.length)
+              ]
+            );
+            round++;
+            break;
+          case 14:
+          case 15:
+          case 16:
+            moveWorld(board);
+            round++;
+            break;
+          case 17:
+            shopItemsGenerator(
+              Math.floor(Math.random() * 14),
+              arrayOfItems[Math.floor(Math.random() * arrayOfItems.length)]
+            );
+            round++;
+            break;
+          case 18:
+            moveWorld(board);
+            round = 0;
+            break;
+          default:
+            break;
+        }
+      }, 500);
+    }
+  };
 
+  const startGame = () => {
+    gameIntervalRunner();
+    window.addEventListener("mouseover", meetObstacle);
     gameScreen.current.classList.remove("stop-game");
     setStartGameVisibility("hidden");
   };
@@ -227,12 +235,14 @@ const GameBoard = () => {
     }
   };
 
+  const [itemFound, setItemFound] = useState('')
   const cleanItemInBoard = (item) => {
+    gameIntervalRunner(true);
     let boardWithoutItem = board.map((row) =>
       row.map((element) => {
-        if (item === element.key) {
+        if (item === element.key.split(',')[0]) {
           console.log("match");
-          return <div />;
+          return <div key={uuidv4()} />;
         } else {
           console.log("not");
           return element;
@@ -240,8 +250,14 @@ const GameBoard = () => {
       })
     );
 
-    setBoard(boardWithoutItem);
-  }; // ! disappear for only a sec
+    setBoard(boardWithoutItem)
+    setItemFound(item);
+  };
+
+  useEffect(() => {
+    console.log(itemFound);
+    if (arrayOfItems.includes(itemFound)) gameIntervalRunner();
+  }, [itemFound]);
 
   const resetBag = () => {
     setGameBag({
@@ -319,13 +335,12 @@ const GameBoard = () => {
   // * RENDERING FUNCTIONS
   // initalizing board
   useEffect(() => {
-    let key = 0;
     const createBaseWorld = () => {
       let tempArray = [];
       for (let row = 0; row < 15; row++) {
         let currentRow = [];
         for (let column = 0; column < 25; column++) {
-          currentRow.push(<div key={key++} />);
+          currentRow.push(<div key={uuidv4()} />);
           if (column === 24) {
             tempArray.push(currentRow);
           }
@@ -340,6 +355,8 @@ const GameBoard = () => {
 
   useEffect(() => {
     collectStartData();
+
+    // return () => gameIntervalRunner(true);
   }, []);
 
   // -----------------------------------
@@ -350,7 +367,6 @@ const GameBoard = () => {
         startGame={startGame}
         startGameVisibility={startGameVisibility}
         restartGame={restartGame}
-        startGameVisibility={startGameVisibility}
         collectMaterial={collectMaterial}
         gameBag={gameBag}
         stopGame={stopGame}
