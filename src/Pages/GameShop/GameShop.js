@@ -68,7 +68,7 @@ const GameBoard = () => {
   // * FUNCTIONS
 
   const obstacleCreator = (positions, material) => {
-    // pop first el and push in new one.
+    // pop first element and push in new one.
     let tempBoard = board.map((e, i) => {
       if (positions.includes(i)) {
         e.shift();
@@ -194,7 +194,7 @@ const GameBoard = () => {
     gameIntervalRunner();
     window.addEventListener("mouseover", meetObstacle);
     gameScreen.current.classList.remove("stop-game");
-    setStartGameVisibility("hidden");
+    setStartGameVisibility("hidden"); // button visibility
   };
 
   const stopGame = () => {
@@ -235,8 +235,11 @@ const GameBoard = () => {
     }
   };
 
-  const [itemFound, setItemFound] = useState('')
-  const cleanItemInBoard = (item) => {
+  // tried to add item found state and from that change arrise a use effect to restart game interval
+  // ! because like this item disappears for only a sec.
+  // ! if i use the itemFound to evoke game interval it works the first time and then the sec time board goes crazy
+  // const [itemFound, setItemFound] = useState('')
+  const cleanItemInBoard = async (item) => {
     gameIntervalRunner(true);
     let boardWithoutItem = board.map((row) =>
       row.map((element) => {
@@ -250,14 +253,15 @@ const GameBoard = () => {
       })
     );
 
-    setBoard(boardWithoutItem)
-    setItemFound(item);
+    await setBoard(boardWithoutItem)
+    // await setItemFound(item);
+    gameIntervalRunner();
   };
 
-  useEffect(() => {
-    console.log(itemFound);
-    if (arrayOfItems.includes(itemFound)) gameIntervalRunner();
-  }, [itemFound]);
+  // useEffect(() => {
+  //   console.log(itemFound);
+  //   if (itemFound !== '') gameIntervalRunner();
+  // }, [itemFound]);
 
   const resetBag = () => {
     setGameBag({
