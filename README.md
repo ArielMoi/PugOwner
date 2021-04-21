@@ -4,6 +4,10 @@ mid-project of appleseeds bootcamp made with - **React.js, js, html & css.**
 
 **raise your own pug!**
 
+Link: https://my-pug.netlify.app/
+
+#
+
 # Pug raising
 ![alt text](https://github.com/ArielMoi/PugOwner/blob/main/src/img/screenshot1.png)
 in this web game you raise a virtual pet. you have a bag (inventory) that includes food and toys to feed and play with your pug.
