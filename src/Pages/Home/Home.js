@@ -243,9 +243,9 @@ const Home = () => {
       setHappy(JSON.parse(localStorage.getItem("health")).happy);
       downingHealth();
     }
-    setInterval(() => {
-      downingHealth();
-    }, 50000);
+    const healthInterval = setInterval(downingHealth, 50000);
+
+    return () => clearInterval(healthInterval);
   }, []);
 
   return (

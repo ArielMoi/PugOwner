@@ -243,7 +243,7 @@ const GameBoard = () => {
     gameIntervalRunner(true);
     let boardWithoutItem = board.map((row) =>
       row.map((element) => {
-        if (item === element.key.split(',')[0]) {
+        if (item === element.key.split(",")[0]) {
           console.log("match");
           return <div key={uuidv4()} />;
         } else {
@@ -253,7 +253,7 @@ const GameBoard = () => {
       })
     );
 
-    await setBoard(boardWithoutItem)
+    await setBoard(boardWithoutItem);
     // await setItemFound(item);
     gameIntervalRunner();
   };
