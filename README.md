@@ -1,6 +1,6 @@
 # PugOwner
 
-mid-project of appleseeds bootcamp made with - **React.js, js, html & css.**
+mid-project of appleseeds bootcamp made with - **React.js.**
 
 **raise your own pug!**
 
